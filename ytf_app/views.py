@@ -21,7 +21,7 @@ def index(request):
 
         print("Downloading...")
         dc = ys.download()
-        file_name = os.path(dc)
+        file_name = os.path.basename(dc)
         print(file_name)
         # print("Download completed!!")
         # file = FileSystemStorage()
