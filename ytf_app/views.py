@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from pytube import YouTube
+from django.core.files.storage import FileSystemStorage
+import os
 # Create your views here.
 
 
@@ -15,9 +17,14 @@ def index(request):
         print("Rating of video: ", yt.rating)
         # Getting the highest resolution possible
         ys = yt.streams.get_highest_resolution()
+        print(ys)
 
         print("Downloading...")
-        ys.download()
-        print("Download completed!!")
+        dc = ys.download()
+        file_name = os.path(dc)
+        print(file_name)
+        # print("Download completed!!")
+        # file = FileSystemStorage()
+        # upload_file = file.save(file_name, dc)
 
     return render(request, 'index.html')
