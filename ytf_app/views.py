@@ -6,28 +6,39 @@ import os
 
 
 def index(request):
+    my_dict = {
+        'urls': None,
+    }
     if request.method == 'POST':
 
         link = request.POST.get('link')
-        yt = YouTube(link)
-        print("Title: ", yt.title)
+        SAVE_PATH = "./media"  # to_do
 
-        print("Number of views: ", yt.views)
-        print("Length of video: ", yt.length)
-        print("Rating of video: ", yt.rating)
-        # Getting the highest resolution possible
-        ys = yt.streams.get_highest_resolution()
-        print(ys)
+        # link of the video to be downloaded
+        try:
+            # object creation using YouTube
+            # which was imported in the beginning
+            yt = YouTube(link)
+        except:
+            print("Connection Error")  # to handle exception
 
-        print("Downloading...")
-        dc = ys.download()
-        file_name = os.path.basename(dc)
-        print(file_name)
+        # filters out all the files with "mp4" extension
 
-        file_path = os.path.dirname(dc)
-        print(file_path)
-        # print("Download completed!!")
-        # file = FileSystemStorage()
-        # upload_file = file.save(file_name, dc)
+        # to set the name of the file
 
-    return render(request, 'index.html')
+        # get the video with the extension and
+        # resolution passed in the get() function
+        d_video = yt.streams.get_highest_resolution()
+        try:
+            # downloading the video
+            dc = d_video.download(SAVE_PATH)
+        except:
+            print("Some Error!")
+        print('Task Completed!')
+        file = FileSystemStorage()
+        url = file.url(dc)
+        my_dict = {
+            'urls': url,
+        }
+
+    return render(request, 'index.html', context=my_dict)
