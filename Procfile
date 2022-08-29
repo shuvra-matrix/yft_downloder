@@ -1,1 +1,1 @@
-web: gunicorn ytf_downloder.wsgi --log-file -
+web: gunicorn yft_downloder.wsgi --log-file -
