@@ -35,8 +35,7 @@ def index(request):
         except:
             print("Some Error!")
         print('Task Completed!')
-        file = FileSystemStorage()
-        url = file.url(dc)
+        url = os.path.basename(dc)
         my_dict = {
             'urls': url,
         }
