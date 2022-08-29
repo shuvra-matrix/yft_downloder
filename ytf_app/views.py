@@ -24,7 +24,7 @@ def index(request):
         file_name = os.path.basename(dc)
         print(file_name)
 
-        file_path = os.getcwd(dc)
+        file_path = os.path.dirname(dc)
         print(file_path)
         # print("Download completed!!")
         # file = FileSystemStorage()
