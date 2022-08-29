@@ -9,6 +9,10 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Hi</h1>
+    <form action="{%url 'ytf:index' %}" method="POST">
+        {% csrf_token %}
+        <input type="url" name="link" id="">
+        <button type="submit">Download</button>
+    </form>
 </body>
 </html>
