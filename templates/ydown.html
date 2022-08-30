@@ -1,21 +1,24 @@
 {% extends 'header.html' %}
+{% load static %}
 {% block body_block %}
+
+<div class="yt_main">
+    <div>
     <form action="{%url 'ytf:ytdown' %}" method="POST">
         {% csrf_token %}
-        <input type="url" name="link" id="">
-        <button type="submit">Download</button>
+        <div class="input-group mb-3">
+            <input type="url" class="form-control" placeholder="Enter YouTube Link" aria-label="Recipient's username" aria-describedby="button-addon2" name="link" required>
+            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
+        </div>
     </form>
     {% if urls %}
     
 
-    <a href="media/{{urls}}">Download</a>
+    <a href="media/{{urls}}">Search</a>
     <br>
-    {{links}}
-
-    
-
     {% endif %}
-</body>
-</html>
+    </div>
 
+
+</div>
 {% endblock %}

@@ -13,10 +13,12 @@
       crossorigin="anonymous"
     />
   </head>
-  <body>
+  <body class= {% if color %}{{color}} {% endif %}>
+
+    
     <nav class="navbar navbar-expand-lg bg-light">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">YTF</a>
+        <a class="navbar-brand" href="{%url 'ytf:index' %}">YTF</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -31,7 +33,7 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{%url 'ytf:ytdown' %}">YouTube</a>
+              <a class="nav-link active" aria-current="page" href="{%url 'ytf:ytdown' %}" id="youtube" >YouTube</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Features</a>
@@ -61,6 +63,15 @@
         </div>
       </div>
     </nav>
-    {% block body_block %} {% endblock %}
+    {% block body_block %} 
+    
+    
+    
+    
+    {% endblock %}
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+    <script src="{%static 'js/script.js' %}" ></script>
   </body>
 </html>
+

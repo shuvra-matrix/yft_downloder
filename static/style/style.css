@@ -2,9 +2,50 @@ body{
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
-    background-color: aqua !important;
+    
+
+}
+
+.bodyclass{
+    width: auto;
+    height: 2000px;
+    overflow: hidden;
+    background: #9D50BB !important;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #6E48AA, #9D50BB) !important;  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #6E48AA, #9D50BB) !important; /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+.ytclass {
+background: #f85032 !important;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #e73827, #f85032) !important;  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #e73827, #f85032) !important; /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
 }
 
 .bg-light {
     --bs-bg-opacity: 0 !important;
+}
+
+.navbar-brand{
+    color: white !important;
+    font-weight: bold !important;
+}
+
+.nav-link{
+    color: white !important;
+    font-weight: bold !important;
+}
+
+.yt_main{
+    width: 60%;
+    margin: 7rem auto;   
+}
+
+
+
+#button-addon2{
+
+    background-color: aliceblue !important;
+    width: 25%;
 }

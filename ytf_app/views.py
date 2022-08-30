@@ -6,11 +6,15 @@ import os
 
 
 def index(request):
-    return render(request, 'index.html')
+    my_dict = {
+        'color' : 'bodyclass',
+    }
+    return render(request, 'index.html',context=my_dict)
 
 def ydown(request):
     my_dict = {
         'urls': None,
+        'color': 'ytclass',
     }
     if request.method == 'POST':
         link = request.POST.get('link')
