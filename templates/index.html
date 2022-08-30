@@ -1,24 +1,5 @@
-<!DOCTYPE html>
-{% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{%static 'style/style.css' %}">
-    <title>Document</title>
-</head>
-<body>
-    <form action="{%url 'ytf:index' %}" method="POST">
-        {% csrf_token %}
-        <input type="url" name="link" id="">
-        <button type="submit">Download</button>
-    </form>
-    {% if urls %}
-    
+{% extends 'header.html' %}
+{% block body_block %}
 
-    <a href="media/{{urls}}">Download</a>
 
-    {% endif %}
-</body>
-</html>
+{% endblock %}
