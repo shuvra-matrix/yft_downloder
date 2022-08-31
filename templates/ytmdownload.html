@@ -1,0 +1,14 @@
+{% extends 'header.html' %} {% block body_block %}
+<div class="maindown">
+  {% if url %}
+  <div class="title ytmaindown">
+    <p style="color: white !important">{{title}}</p>
+  </div>
+  <div class="img">
+    <img src="{{thumb}}" alt="" />
+  </div>
+  <div class="link">
+    <a class="down" href="media/{{url}}" target="_blank"> Download 128kbps</a>
+  </div>
+</div>
+{% endif %} {% endblock %}
