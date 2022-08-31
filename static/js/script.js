@@ -1,6 +1,7 @@
 
-let yt = document.getElementById('youtube');
-let bodys = document.querySelector('.bodyclass');
-let yo = document.querySelector('.yt');
+let loads = document.querySelector('.load');
+console.log('ji');
+loads.classList.add('hidden')
+
 
 

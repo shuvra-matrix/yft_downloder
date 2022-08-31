@@ -11,6 +11,18 @@ body{
     width: 10%;
 }
 
+.load{
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    margin: auto;
+}
+
+.hidden{
+    display: none !important;
+}
+
+
 .bodyclass{    
     overflow: hidden;
     background: #9D50BB !important;  /* fallback for old browsers */

@@ -1,8 +1,5 @@
-from asyncio.windows_events import NULL
-from hashlib import new
 from django.shortcuts import render,redirect
 from pytube import YouTube
-from django.core.files.storage import FileSystemStorage
 import os,glob
 from random import randint
 
@@ -34,6 +31,7 @@ def ydown(request):
     my_dict = {
         'urls': None,
         'color': 'ytclass',
+        
     }
     return render(request, 'ydown.html', context=my_dict)
 
@@ -42,7 +40,9 @@ def ytdownload(request):
     if request.method == 'POST':
         quality_list =[]
         size_list = []
-        link = request.POST.get('link')  
+        link = request.POST.get('link')
+        if 'youtu' not in link:
+            return redirect('/ytdown')  
         try:
             yt = YouTube(link)
             title = yt.title
@@ -50,7 +50,7 @@ def ytdownload(request):
             thumb = yt.thumbnail_url
             
         except:
-            print("Connection Error")  
+            return redirect('/ytdown')  
         
         try:
             
@@ -97,7 +97,7 @@ def yvdown(request):
             filename = f'video{rand}.mp4'
             dc = link.download(SAVE_PATH, filename=filename)
         except:
-            print("Some Error!")
+            return redirect('/ytdown')
 
         
         url = os.path.basename(dc)
