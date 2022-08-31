@@ -1,25 +1,37 @@
-{% extends 'header.html' %}
-{% load static %}
-{% block body_block %}
+{% extends 'header.html' %} {% load static %} {% block body_block %}
 
 <div class="yt_main">
-    <div class="yt_sub">
-        <p class="yt_p">YouTube Video Downloder</p>
-    </div>
-    <div>
+  <div class="yt_sub">
+    <p class="yt_p">YouTube Video Downloder</p>
+  </div>
+  <div>
     <form action="{%url 'ytf:ytdownload' %}" method="POST">
-        {% csrf_token %}
-        <div class="input-group mb-3">
-            <input type="url" class="form-control" placeholder="Enter YouTube Link" aria-label="Recipient's username" aria-describedby="button-addon2" name="link" required>
-            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
-        </div>
+      {% csrf_token %}
+      <div class="input-group mb-3">
+        <input
+          type="url"
+          class="form-control"
+          placeholder="Enter YouTube Link"
+          aria-label="Recipient's username"
+          aria-describedby="button-addon2"
+          name="link"
+          required
+        />
+        <button
+          class="btn btn-outline-secondary"
+          type="submit"
+          id="button-addon2"
+        >
+          Search
+        </button>
+      </div>
     </form>
 
     {% if mess %}
-        <script> alert("Enter Valid Youtube Link")</script>
+    <script>
+      alert("{{mess}}");
+    </script>
     {% endif %}
-    
-
-
+  </div>
+  {% endblock %}
 </div>
-{% endblock %}

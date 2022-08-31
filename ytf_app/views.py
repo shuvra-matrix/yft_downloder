@@ -27,10 +27,9 @@ def index(request):
 
 def ydown(request):
     my_dict = {
-        'urls': None,
         'color': 'ytclass',
-
     }
+
     return render(request, 'ydown.html', context=my_dict)
 
 
@@ -40,7 +39,14 @@ def ytdownload(request):
         size_list = []
         link = request.POST.get('link')
         if 'youtu' not in link:
-            return redirect('/ytdown')
+            mess = 'Please Enter Valid Youtube Link'
+            my_dict = {
+                'color': 'ytclass',
+                'mess': mess
+            }
+
+            return render(request, 'ydown.html', context=my_dict)
+
         try:
             yt = YouTube(link)
             title = yt.title
@@ -48,7 +54,13 @@ def ytdownload(request):
             thumb = yt.thumbnail_url
 
         except:
-            return redirect('/ytdown')
+            mess = 'Server Error'
+            my_dict = {
+                'color': 'ytclass',
+                'mess': mess
+            }
+
+            return render(request, 'ydown.html', context=my_dict)
 
         try:
 
@@ -95,7 +107,13 @@ def yvdown(request):
             filename = f'video{rand}.mp4'
             dc = link.download(SAVE_PATH, filename=filename)
         except:
-            return redirect('/ytdown')
+            mess = 'Server Error'
+            my_dict = {
+                'color': 'ytclass',
+                'mess': mess
+            }
+
+            return render(request, 'ydown.html', context=my_dict)
 
         url = os.path.basename(dc)
         request.session['url'] = url
@@ -124,7 +142,13 @@ def ytmsearch(request):
         dc = None
         link = request.POST.get('link')
         if 'youtu' not in link:
-            return redirect('/ytdown')
+            mess = 'Please Enter Valid Youtube Link'
+            my_dict = {
+                'color': 'yt_body',
+                'mess': mess
+            }
+
+            return render(request, 'ytmusic.html', context=my_dict)
         try:
             yt = YouTube(link)
             title = yt.title
@@ -147,7 +171,13 @@ def ytmsearch(request):
                 'thumb': thumb,
             }
         except:
-            return redirect('/ytmusic')
+            mess = 'Server Error'
+            my_dict = {
+                'color': 'yt_body',
+                'mess': mess
+            }
+
+            return render(request, 'ytmusic.html', context=my_dict)
 
         return render(request, 'ytmdownload.html', context=mydict)
     return redirect('/ytmusic')
