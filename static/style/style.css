@@ -1,6 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lobster&display=swap');
 body{
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
-    background-color: aqua;
+    font-family: 'Bebas Neue', cursive !important;
+    
+
 }
+.yt_logo{
+    width: 10%;
+}
+
+.load{
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    margin: auto;
+}
+
+.hidden{
+    display: none !important;
+}
+
+
+.bodyclass{    
+    overflow: hidden;
+    background: #9D50BB !important;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #6E48AA, #9D50BB) !important;  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #6E48AA, #9D50BB) !important; /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+.ytclass {
+background: #f85032 !important;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #e73827, #f85032) !important;  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #e73827, #f85032) !important; /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+.ytdown{
+    background: #f79d00 !important;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #64f38c, #f79d00) !important;  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #64f38c, #f79d00) !important; /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+.bg-light {
+    --bs-bg-opacity: 0 !important;
+}
+
+.navbar-brand{
+    color: white !important;
+    font-size: 2.3rem !important;
+    font-family: 'Bebas Neue', cursive !important;
+}
+
+.nav-link{
+    color: white !important;
+    font-size: 1.5rem !important;
+    font-family: 'Bebas Neue', cursive !important;
+}
+
+.yt_main{
+    width: 60%;
+    margin: 5rem auto;   
+}
+
+.maindown{
+    width: 70%;
+    margin: 4px auto;
+}
+
+.img{
+    width: 100%;
+    text-align: center;
+}
+
+.length{
+    margin-top: 1rem;
+}
+
+.table{
+    margin-top: 1rem !important;
+}
+
+img{
+    width: 50%;
+    margin: 1rem auto;
+}
+
+#button-addon2{
+
+    background-color: aliceblue !important;
+    width: 25%;
+    color: #e73827;
+}
+.ytdowns{
+    background: #56ab2f !important;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #a8e063, #56ab2f) !important;  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #a8e063, #56ab2f) !important; /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+
+}
+
+.down{
+    border: 2px solid rebeccapurple;
+    border-radius: 5px;
+    padding: 1rem;
+    margin: 2rem auto; 
+    background: -webkit-gradient(linear, left top, right top, from(#38d39f), to(#38a4d3));
+    background: linear-gradient(left, #38d39f, #38a4d3);
+    color: white;
+    font-size: 1.2rem;
+    text-align: center;
+}
+a:link{
+    text-decoration: none;
+}
+
+
+p{
+    text-align: center;
+}
+
+.yt_p{
+    font-family: 'Lobster', cursive;
+    font-size: 4.5rem;
+    margin-bottom: 3rem;
+}
+
+.link{
+    width: 60%;
+    margin: 2rem auto;
+    text-align: center;
+}
+
+.ytmaindown{
+    text-align: center;
+}
+
+@media only screen and (max-width: 600px){
+    .yt_main{
+        width: 85%;
+        margin: 3rem auto;   
+    }
+    .maindown{
+        width: 80%;
+        margin: 4px auto;
+    }
+    
+    .img{
+        width: 100%;
+        text-align: center;
+    }
+    
+    .length{
+        margin-top: 1rem;
+    }
+    
+    .table{
+        margin-top: 1rem !important;
+    }
+    
+    img{
+        width: 60%;
+        margin: 1rem auto;
+    }
+    .yt_p{
+        font-family: 'Lobster', cursive;
+        font-size: 3rem;
+        margin-bottom: 3rem;
+    }
+
+    
+
+    
+
+
+
+};
+
+@media only screen and (max-width: 280px){
+    .yt_main{
+        width: 95%;
+        margin: 7rem auto;   
+    }
+
+};
+
+    
