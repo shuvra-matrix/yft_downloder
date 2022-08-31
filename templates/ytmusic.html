@@ -2,10 +2,10 @@
 
 <div class="yt_main">
   <div class="yt_sub">
-    <p class="yt_p">YouTube Video Downloder</p>
+    <p class="yt_p">Youtube Video To MP3</p>
   </div>
   <div>
-    <form action="{%url 'ytf:ytdownload' %}" method="POST">
+    <form action="{%url 'ytf:ytmsearch' %}" method="POST">
       {% csrf_token %}
       <div class="input-group mb-3">
         <input
@@ -29,7 +29,7 @@
 
     {% if mess %}
     <script>
-      alert("{{mess}}");
+      alert("Enter Valid Youtube Link");
     </script>
     {% endif %}
   </div>
