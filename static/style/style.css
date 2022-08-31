@@ -1,9 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lobster&display=swap');
 body{
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
+    font-family: 'Bebas Neue', cursive !important;
     
 
+}
+.yt_logo{
+    width: 10%;
 }
 
 .bodyclass{    
@@ -34,17 +39,19 @@ background: linear-gradient(to right, #64f38c, #f79d00) !important; /* W3C, IE 1
 
 .navbar-brand{
     color: white !important;
-    font-weight: bold !important;
+    font-size: 2.3rem !important;
+    font-family: 'Bebas Neue', cursive !important;
 }
 
 .nav-link{
     color: white !important;
-    font-weight: bold !important;
+    font-size: 1.5rem !important;
+    font-family: 'Bebas Neue', cursive !important;
 }
 
 .yt_main{
     width: 60%;
-    margin: 7rem auto;   
+    margin: 5rem auto;   
 }
 
 .maindown{
@@ -103,6 +110,13 @@ a:link{
 p{
     text-align: center;
 }
+
+.yt_p{
+    font-family: 'Lobster', cursive;
+    font-size: 4.5rem;
+    margin-bottom: 3rem;
+}
+
 .link{
     width: 60%;
     margin: 2rem auto;
@@ -116,7 +130,7 @@ p{
 @media only screen and (max-width: 600px){
     .yt_main{
         width: 85%;
-        margin: 8rem auto;   
+        margin: 3rem auto;   
     }
     .maindown{
         width: 80%;
@@ -139,6 +153,11 @@ p{
     img{
         width: 60%;
         margin: 1rem auto;
+    }
+    .yt_p{
+        font-family: 'Lobster', cursive;
+        font-size: 3rem;
+        margin-bottom: 3rem;
     }
 
     

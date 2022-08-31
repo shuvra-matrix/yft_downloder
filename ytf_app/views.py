@@ -1,12 +1,30 @@
+from asyncio.windows_events import NULL
 from hashlib import new
 from django.shortcuts import render,redirect
 from pytube import YouTube
 from django.core.files.storage import FileSystemStorage
-import os
-# Create your views here.
+import os,glob
+from random import randint
+
 
 
 def index(request):
+    dir = 'media'
+    urls = None
+    if request.session.has_key('url'):
+        file_name = request.session['url']
+        urls = f'media\\{file_name}'
+        del request.session['url']
+    filelist = glob.glob(os.path.join(dir, "*"))
+    for f in filelist:
+        if f == urls:
+            continue
+        else:
+            os.remove(f)
+        
+
+    
+
     my_dict = {
         'color' : 'bodyclass',
     }
@@ -18,6 +36,7 @@ def ydown(request):
         'color': 'ytclass',
     }
     return render(request, 'ydown.html', context=my_dict)
+
 
 def ytdownload(request):
     if request.method == 'POST':
@@ -31,7 +50,7 @@ def ytdownload(request):
             thumb = yt.thumbnail_url
             
         except:
-            print("Connection Error")  # to handle exception
+            print("Connection Error")  
         
         try:
             
@@ -61,6 +80,7 @@ def ytdownload(request):
         return render(request, 'ytdownload.html', context=my_dict)
     return redirect('/')
 
+
 def yvdown(request):
     if request.method == 'POST':
         SAVE_PATH = "./media"
@@ -68,18 +88,20 @@ def yvdown(request):
         title = request.POST.get('title')
         link = request.POST.get('link')      
         reg = request.POST.get('reg')
-        print(reg)
+       
         thumb = request.POST.get('thumb')
         try:
             yt = YouTube(link)
             link = yt.streams.filter(res=reg,progressive=True).first()
-            print(link)
-            dc = link.download(SAVE_PATH)
+            rand = randint(1,8909)
+            filename = f'video{rand}.mp4'
+            dc = link.download(SAVE_PATH, filename=filename)
         except:
             print("Some Error!")
 
-        print('Task Completed!')
+        
         url = os.path.basename(dc)
+        request.session['url'] = url
         mydict = {
     
             'color' : 'ytdowns',
