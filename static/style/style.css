@@ -6,9 +6,7 @@ body{
 
 }
 
-.bodyclass{
-    width: auto;
-    height: 2000px;
+.bodyclass{    
     overflow: hidden;
     background: #9D50BB !important;  /* fallback for old browsers */
     background: -webkit-linear-gradient(to right, #6E48AA, #9D50BB) !important;  /* Chrome 10-25, Safari 5.1-6 */
@@ -20,6 +18,13 @@ body{
 background: #f85032 !important;  /* fallback for old browsers */
 background: -webkit-linear-gradient(to right, #e73827, #f85032) !important;  /* Chrome 10-25, Safari 5.1-6 */
 background: linear-gradient(to right, #e73827, #f85032) !important; /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+.ytdown{
+    background: #f79d00 !important;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #64f38c, #f79d00) !important;  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #64f38c, #f79d00) !important; /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
 }
 
@@ -42,7 +47,20 @@ background: linear-gradient(to right, #e73827, #f85032) !important; /* W3C, IE 1
     margin: 7rem auto;   
 }
 
+.maindown{
+    width: 70%;
+    margin: 4px auto;
+}
 
+.img{
+    width: 100%;
+    text-align: center;
+}
+
+img{
+    width: 50%;
+    margin: 1px auto;
+}
 
 #button-addon2{
 

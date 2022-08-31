@@ -10,6 +10,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
     path('ytdown', views.ydown , name='ytdown'),
+    path('ytdownload',views.ytdownload, name = 'ytdownload'),
 ]
 
 
