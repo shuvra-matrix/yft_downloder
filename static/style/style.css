@@ -57,13 +57,104 @@ background: linear-gradient(to right, #64f38c, #f79d00) !important; /* W3C, IE 1
     text-align: center;
 }
 
+.length{
+    margin-top: 1rem;
+}
+
+.table{
+    margin-top: 1rem !important;
+}
+
 img{
     width: 50%;
-    margin: 1px auto;
+    margin: 1rem auto;
 }
 
 #button-addon2{
 
     background-color: aliceblue !important;
     width: 25%;
+    color: #e73827;
 }
+.ytdowns{
+    background: #56ab2f !important;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #a8e063, #56ab2f) !important;  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #a8e063, #56ab2f) !important; /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+
+}
+
+.down{
+    border: 2px solid rebeccapurple;
+    border-radius: 5px;
+    padding: 1rem;
+    margin: 2rem auto; 
+    background: -webkit-gradient(linear, left top, right top, from(#38d39f), to(#38a4d3));
+    background: linear-gradient(left, #38d39f, #38a4d3);
+    color: white;
+    font-size: 1.2rem;
+    text-align: center;
+}
+a:link{
+    text-decoration: none;
+}
+
+
+p{
+    text-align: center;
+}
+.link{
+    width: 60%;
+    margin: 2rem auto;
+    text-align: center;
+}
+
+.ytmaindown{
+    text-align: center;
+}
+
+@media only screen and (max-width: 600px){
+    .yt_main{
+        width: 85%;
+        margin: 8rem auto;   
+    }
+    .maindown{
+        width: 80%;
+        margin: 4px auto;
+    }
+    
+    .img{
+        width: 100%;
+        text-align: center;
+    }
+    
+    .length{
+        margin-top: 1rem;
+    }
+    
+    .table{
+        margin-top: 1rem !important;
+    }
+    
+    img{
+        width: 60%;
+        margin: 1rem auto;
+    }
+
+    
+
+    
+
+
+
+};
+
+@media only screen and (max-width: 280px){
+    .yt_main{
+        width: 95%;
+        margin: 7rem auto;   
+    }
+
+};
+
+    
