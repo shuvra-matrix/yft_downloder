@@ -169,6 +169,7 @@ def ytmsearch(request):
                 'title': title,
                 'url': url,
                 'thumb': thumb,
+                'size': music_size,
             }
         except:
             mess = 'Server Error'
