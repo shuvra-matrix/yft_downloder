@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'ytf_app',
+    'pwa_webpush',
 ]
 
 MIDDLEWARE = [
@@ -131,4 +132,117 @@ MEDIA_URL = '/media/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+PWA_CONFIG = {
+    # ...
+    "name": "YTF Downloder (Beta)",
+    "short_name": "YTF Downloder (Beta)",
+    "theme_color": "#f85032",
+    "background_color": "#f85032",
+    "display": "standalone",
+    "orientation": "portrait",
+    "scope": "/",
+    "start_url": "/",
+    "lang": "en",
+    "dir": "ltr",
+    "icons": [
+        {
+            "src": "/static/pwa/images/icons/72x72.png",
+            "type": "image/png",
+            "sizes": "72x72"
+        },
+        {
+            "src": "/static/pwa/images/icons/96x96.png",
+            "type": "image/png",
+            "sizes": "96x96"
+        },
+        {
+            "src": "/static/pwa/images/icons/128x128.png",
+            "type": "image/png",
+            "sizes": "128x128"
+        },
+        {
+            "src": "/static/pwa/images/icons/144x144.png",
+            "type": "image/png",
+            "sizes": "144x144"
+        },
+        {
+            "src": "/static/pwa/images/icons/152x152.png",
+            "type": "image/png",
+            "sizes": "152x152"
+        },
+        {
+            "src": "/static/pwa/images/icons/192x192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "/static/pwa/images/icons/384x384.png",
+            "type": "image/png",
+            "sizes": "384x384"
+        },
+        {
+            "src": "/static/pwa/images/icons/512x512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ],
+    "description": "Download Videos and Music From Youtube, Facebook, Twitter",
+    "version": "0.1",
+    "manifest_version": "0.1",
+    "permissions": [
+        "notifications",
+        "webRequest"
+    ],
+    "author": "Shuvra Chakrabarty"
+    # ...
+}
+
+PWA_APP_SPLASH_SCREEN = [
+    {
+        'src': '/static/img/yt5.png',
+        'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
+    }
+]
+PWA_APP_DIR = 'ltr'
+
+PWA_APP_LANG = 'en-US'
+
+PWA_SW = """const manifest = self.__WB_MANIFEST;
+if (manifest) {
+  // do nothing
+}
+
+// https://web.dev/offline-fallback-page/
+const CACHE_NAME = 'offline-html';
+const FALLBACK_HTML_URL = '/offline/';
+self.addEventListener('install',  (event) => {
+  event.waitUntil(
+    // Setting {cache: 'reload'} in the new request will ensure that the
+    // response isn't fulfilled from the HTTP cache; i.e., it will be from
+    // the network.
+    caches.open(CACHE_NAME)
+      .then((cache) => cache.add(
+        new Request(FALLBACK_HTML_URL, { cache: "reload" })
+      ))
+  );
+
+  // Force the waiting service worker to become the active service worker.
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', function(event) {
+  // Tell the active service worker to take control of the page immediately.
+  self.clients.claim();
+});
+
+self.addEventListener("fetch", event => {
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => {
+        return response || fetch(event.request);
+      })
+      .catch(() => {
+        return caches.match(FALLBACK_HTML_URL);
+      })
+  );
+}); """
