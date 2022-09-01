@@ -1,7 +1,10 @@
+let click = document.querySelector(".cros");
 
-let loads = document.querySelector('.load');
-console.log('ji');
-loads.classList.add('hidden')
+let warnng = document.querySelector(".warning_main");
 
+console.log("hewl");
 
-
+click.addEventListener("click", () => {
+  console.log("hiujijihj");
+  warnng.classList.add("hidden_message");
+});
