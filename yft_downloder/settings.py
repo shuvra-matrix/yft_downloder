@@ -136,7 +136,7 @@ PWA_CONFIG = {
     # ...
     "name": "YTF Downloder (Beta)",
     "short_name": "YTF Downloder (Beta)",
-    "theme_color": "#f85032",
+    "theme_color": "#c12c11",
     "background_color": "#f85032",
     "display": "standalone",
     "orientation": "portrait",
@@ -146,42 +146,42 @@ PWA_CONFIG = {
     "dir": "ltr",
     "icons": [
         {
-            "src": "/static/pwa/images/icons/72x72.png",
+            "src": "/static/images/72x72.png",
             "type": "image/png",
             "sizes": "72x72"
         },
         {
-            "src": "/static/pwa/images/icons/96x96.png",
+            "src": "/static/images/96x96.png",
             "type": "image/png",
             "sizes": "96x96"
         },
         {
-            "src": "/static/pwa/images/icons/128x128.png",
+            "src": "/static/images/128x128.png",
             "type": "image/png",
             "sizes": "128x128"
         },
         {
-            "src": "/static/pwa/images/icons/144x144.png",
+            "src": "/static/images/144x144.png",
             "type": "image/png",
             "sizes": "144x144"
         },
         {
-            "src": "/static/pwa/images/icons/152x152.png",
+            "src": "/static/images/152x152.png",
             "type": "image/png",
             "sizes": "152x152"
         },
         {
-            "src": "/static/pwa/images/icons/192x192.png",
+            "src": "/static/images/192x192.png",
             "type": "image/png",
             "sizes": "192x192"
         },
         {
-            "src": "/static/pwa/images/icons/384x384.png",
+            "src": "/static/images/384x384.png",
             "type": "image/png",
             "sizes": "384x384"
         },
         {
-            "src": "/static/pwa/images/icons/512x512.png",
+            "src": "/static/images/512x512.png",
             "type": "image/png",
             "sizes": "512x512"
         }
@@ -197,12 +197,7 @@ PWA_CONFIG = {
     # ...
 }
 
-PWA_APP_SPLASH_SCREEN = [
-    {
-        'src': '/static/img/yt5.png',
-        'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
-    }
-]
+
 PWA_APP_DIR = 'ltr'
 
 PWA_APP_LANG = 'en-US'
