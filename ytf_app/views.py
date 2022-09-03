@@ -3,22 +3,36 @@ from pytube import YouTube
 import os
 import glob
 from random import randint
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 
-def index(request):
+def cloud_upload(dc, fileid):
+    cloudinary.config(
+        cloud_name="dqone7ala",
+        api_key="412496529895946",
+        api_secret="2siKsON-MfBmh9o0pIPVd31z-Ww",
+
+
+    )
+
+    upload_result = cloudinary.uploader.upload_large(
+        dc,  resource_type="video", public_id=fileid)
+
+    files = os.path.basename(dc)
+    url = upload_result['url']
     dir = 'media'
-    urls = None
-    if request.session.has_key('url'):
-        file_name = request.session['url']
-        urls = f'media\\{file_name}'
-        del request.session['url']
+
+    urls = f'media\\{files}'
     filelist = glob.glob(os.path.join(dir, "*"))
     for f in filelist:
         if f == urls:
-            continue
-        else:
             os.remove(f)
+    return url
 
+
+def index(request):
     my_dict = {
         'color': 'bodyclass',
     }
@@ -65,17 +79,28 @@ def ytdownload(request):
         try:
 
             s1 = round((yt.streams.get_by_resolution('360p').filesize)/1000000)
+            if s1 < 100:
+                size_list.append(s1)
+                quality_list.append('360p')
 
-            size_list.append(s1)
-            quality_list.append('360p')
         except:
             pass
         try:
             s2 = round((yt.streams.get_by_resolution('720p').filesize)/1000000)
-            size_list.append(s2)
-            quality_list.append('720p')
+            if s2 < 100:
+                size_list.append(s2)
+                quality_list.append('720p')
         except:
             pass
+
+        if len(quality_list) == 0:
+            mess = 'File Size Is Too Large'
+            my_dict = {
+                'color': 'ytclass',
+                'mess': mess
+            }
+
+            return render(request, 'ydown.html', context=my_dict)
 
         my_dict = {
             'qlist': quality_list,
@@ -105,7 +130,11 @@ def yvdown(request):
             link = yt.streams.filter(res=reg, progressive=True).first()
             rand = randint(1, 8909)
             filename = f'video{rand}.mp4'
+            fileid = f'video{rand}'
             dc = link.download(SAVE_PATH, filename=filename)
+
+            url = cloud_upload(dc, fileid)
+
         except:
             mess = 'Server Error'
             my_dict = {
@@ -115,8 +144,6 @@ def yvdown(request):
 
             return render(request, 'ydown.html', context=my_dict)
 
-        url = os.path.basename(dc)
-        request.session['url'] = url
         mydict = {
 
             'color': 'ytdowns',
@@ -158,11 +185,20 @@ def ytmsearch(request):
                 only_audio=True, abr='128kbps').first()
             music_size = round((yt.streams.filter(
                 only_audio=True, abr='128kbps').first().filesize)/1000000)
+            print(music_size)
+            if music_size > 100:
+                mess = 'FILE SIZE IS TOO LARGE'
+                my_dict = {
+                    'color': 'yt_body',
+                    'mess': mess
+                }
+
+                return render(request, 'ytmusic.html', context=my_dict)
             rand = randint(1, 8909)
             filename = f'audio{rand}.mp3'
+            fileid = f'audio{rand}'
             dc = music_list.download(SAVE_PATH, filename=filename)
-            url = os.path.basename(dc)
-            request.session['url'] = url
+            url = cloud_upload(dc, filename)
 
             mydict = {
                 'color': 'ytmdowns',
