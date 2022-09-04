@@ -187,8 +187,8 @@ PWA_CONFIG = {
         }
     ],
     "description": "Download Videos and Music From Youtube, Facebook, Twitter",
-    "version": "0.1",
-    "manifest_version": "0.1",
+    "version": "2",
+    "manifest_version": "0.2",
     "permissions": [
         "notifications",
         "webRequest"

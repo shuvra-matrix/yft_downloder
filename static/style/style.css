@@ -1,12 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lobster&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+html {
+    scroll-behavior: smooth;
+}
 
 body {
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
-    font-family: 'Bebas Neue', cursive !important;
+    font-family: "Inter", sans-serif !important;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.527) !important;
-
+    font-weight: normal;
+    font-style: normal;
+    color: #888;
+    font-size: 15px;
 
 }
 
@@ -27,13 +35,15 @@ body {
 
 
 .bodyclass {
-    overflow: hidden;
-    background: #9D50BB !important;
+
+    /* background: #9D50BB !important;
     /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #6E48AA, #9D50BB) !important;
+    /* background: -webkit-linear-gradient(to right, #6E48AA, #9D50BB) !important; */
     /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #6E48AA, #9D50BB) !important;
+    /* background: linear-gradient(to right, #6E48AA, #9D50BB) !important;
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background-color: #cd99fe !important;
+    border-color: #cd99fe !important;
 
 }
 
@@ -83,20 +93,77 @@ body {
 
 .navbar-brand {
     color: white !important;
-    font-size: 2.3rem !important;
-    font-family: 'Bebas Neue', cursive !important;
+    font-size: 2rem !important;
+    font-family: "Inter",
+        sans-serif !important;
+    margin-left: 3rem;
+}
+
+.navbar-collapse {
+    margin-left: 2rem;
 }
 
 .nav-link {
     color: white !important;
-    font-size: 1.5rem !important;
-    font-family: 'Bebas Neue', cursive !important;
+    font-size: 1.2rem !important;
+    font-family: "Inter",
+        sans-serif !important;
 }
 
 .yt_main {
     width: 60%;
-    margin: 5rem auto;
+    margin: 4rem auto;
 }
+
+
+.div_main {
+
+    height: 100%;
+    margin: 0px auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    text-align: right !important;
+}
+
+.div_sub {
+    height: 100%;
+    width: 46%;
+    margin: 0px auto;
+    flex: 46%;
+    margin: 20px;
+
+
+}
+
+.svg {
+    width: 46%;
+    flex: 46%;
+    margin-left: 10px;
+    text-align: center;
+    margin-bottom: 3rem;
+
+}
+
+svg {
+    height: 90%;
+    width: 90%;
+}
+
+.main_p {
+    font-size: 2rem !important;
+    color: white;
+    padding: 3rem;
+    text-align: left !important;
+
+}
+
+
+
+
+
+
 
 .maindown {
     width: 70%;
@@ -161,12 +228,13 @@ p {
 }
 
 .yt_p {
-    font-family: 'Lobster', cursive;
-    font-size: 4.5rem;
-    margin-bottom: 3rem;
-    -webkit-text-stroke-width: 1px;
-    -webkit-text-stroke-color: rgb(223, 207, 207);
-    color: #200402;
+    font-family: 'Lobster',
+        cursive;
+    font-size: 4rem;
+    margin-bottom: 2rem;
+    color: #fff;
+    text-shadow: 0px 3px 8px #00000017;
+    text-transform: capitalize;
 }
 
 .link {
@@ -262,8 +330,9 @@ p {
 
     .yt_p {
         font-family: 'Lobster', cursive;
-        font-size: 3rem;
+        font-size: 2.5rem;
         margin-bottom: 3rem;
+        color: white;
     }
 
     .warning_main {
@@ -300,6 +369,24 @@ p {
         margin: 2rem auto;
         text-align: center;
     }
+
+
+    .navbar-brand {
+        margin-left: 1rem;
+    }
+
+    .main_p {
+        font-size: 1.5rem !important;
+        color: white;
+        padding: 2rem;
+        text-align: left !important;
+
+    }
+
+    .icon {
+        width: 60px !important;
+    }
+
 
 }
 
