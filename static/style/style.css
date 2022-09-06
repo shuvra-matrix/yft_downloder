@@ -87,6 +87,10 @@ body {
 
 }
 
+.twi_body {
+    background: rgb(26, 152, 229) !important;
+}
+
 .fb_body {
     background: rgb(17, 150, 245) !important;
 }

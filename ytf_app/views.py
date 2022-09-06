@@ -289,3 +289,10 @@ def fbsearch(request):
             return render(request, 'fbsearch.html', context=my_dict)
 
     return render(request, 'fbsearch.html', context=my_dict)
+
+
+def twisearch(request):
+    my_dict = {
+        'color': 'twi_body'
+    }
+    return render(request, 'twisearch.html', context=my_dict)

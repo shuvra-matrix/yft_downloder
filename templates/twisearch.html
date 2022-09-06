@@ -1,0 +1,38 @@
+{% extends 'header.html' %} {% load static %} {% block body_block %}
+
+<div class="yt_main">
+  <div class="yt_sub">
+    <p class="yt_p">Twitter Video Download Comming Soon...</p>
+  </div>
+
+  {% if url %}
+  <div>
+    <form action="{%url 'ytf:fbsearch' %}" method="POST">
+      {% csrf_token %}
+      <div class="input-group mb-3">
+        <input
+          type="url"
+          class="form-control"
+          placeholder="Enter YouTube Link"
+          aria-label="Recipient's username"
+          aria-describedby="button-addon2"
+          name="link"
+          required
+        />
+        <button
+          class="btn btn-outline-secondary"
+          type="submit"
+          id="button-addon2"
+          style="color: rgb(17, 150, 245) !important"
+        >
+          Search
+        </button>
+      </div>
+    </form>
+
+    <div class="link" style="margin-top: 1rem">
+      <a class="down" href="{{url}}" target="_blank"> Download </a>
+    </div>
+    {% endif %} {% endblock %}
+  </div>
+</div>
