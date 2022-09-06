@@ -70,6 +70,9 @@ def ytdownload(request):
             yt = YouTube(link)
             title = yt.title
             length = yt.length
+            mins = int(length/60)
+            sec = length - (60*mins)
+            length = f'{mins}:{sec} Minutes'
             thumb = yt.thumbnail_url
 
         except:
@@ -185,6 +188,9 @@ def ytmsearch(request):
             yt = YouTube(link)
             title = yt.title
             length = yt.length
+            mins = int(length/60)
+            sec = length - (60*mins)
+            length = f'{mins}:{sec} Minutes'
             thumb = yt.thumbnail_url
             music_list = yt.streams.filter(
                 only_audio=True, abr='128kbps').first()
@@ -212,6 +218,7 @@ def ytmsearch(request):
                 'url': url,
                 'thumb': thumb,
                 'size': music_size,
+                'length': length,
             }
         except:
             mess = 'Server Error'
