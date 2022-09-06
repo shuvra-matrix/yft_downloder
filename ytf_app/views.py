@@ -6,6 +6,11 @@ from random import randint
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+import re
+import wget
+from bs4 import BeautifulSoup
+import requests
+import lxml
 
 
 def cloud_upload(dc, fileid):
@@ -198,6 +203,7 @@ def ytmsearch(request):
             filename = f'audio{rand}.mp3'
             fileid = f'audio{rand}'
             dc = music_list.download(SAVE_PATH, filename=filename)
+            print(dc)
             url = cloud_upload(dc, filename)
 
             mydict = {
@@ -218,3 +224,61 @@ def ytmsearch(request):
 
         return render(request, 'ytmdownload.html', context=mydict)
     return redirect('/ytmusic')
+
+
+def fbsearch(request):
+
+    my_dict = {
+        'color': 'fb_body',
+
+
+    }
+
+    if request.method == 'POST':
+        SAVE_PATH = "./media"
+        PRODUCT_URL = request.POST.get('link')
+        x = re.match(
+            r'^(https:|)[/][/]www.([^/]+[.])*facebook.com', PRODUCT_URL)
+        y = re.match(r'^(https:|)[/][/]www.([^/]+[.])*fb.watch', PRODUCT_URL)
+        if x or y:
+            try:
+                header = {'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36 Edg/91.0.864.48",
+                          'Accept-Language': "en-US,en;q=0.9"}
+                req = requests.get(PRODUCT_URL)
+                supe = BeautifulSoup(req.text, 'lxml')
+                desc = supe.find(
+                    'meta', property="og:video:url").attrs['content']
+                print(desc)
+                filename = wget.download(desc, SAVE_PATH)
+                print(filename)
+                newfilename = filename.replace('./media/', '')
+                print(newfilename)
+                rand = randint(1, 8909)
+                fileid = f'video{rand}'
+                url = cloud_upload(filename, fileid)
+                my_dict = {
+                    'color': 'fb_body',
+
+                    'url': url
+                }
+
+                return render(request, 'fbsearch.html', context=my_dict)
+            except:
+                mess = 'Server Error'
+                my_dict = {
+                    'color': 'fb_body',
+                    'mess': mess
+                }
+
+                return render(request, 'fbsearch.html', context=my_dict)
+
+        else:
+            mess = 'Please Enter Valid Facebook Link'
+            my_dict = {
+                'color': 'fb_body',
+                'mess': mess
+            }
+
+            return render(request, 'fbsearch.html', context=my_dict)
+
+    return render(request, 'fbsearch.html', context=my_dict)

@@ -87,6 +87,10 @@ body {
 
 }
 
+.fb_body {
+    background: rgb(17, 150, 245) !important;
+}
+
 .bg-light {
     --bs-bg-opacity: 0 !important;
 }

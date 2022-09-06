@@ -15,7 +15,9 @@ urlpatterns = [
     path('downloadyt', views.yvdown, name='yvdown'),
     path('ytmusic', views.ytmusic, name='ytmusic'),
     path('ytmsearch', views.ytmsearch, name='ytmsearch'),
+    path('fbsearch', views.fbsearch, name='fbsearch'),
     path('offline/', TemplateView.as_view(template_name="offline.html")),
+
 ]
 
 
