@@ -50,20 +50,17 @@ def index(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     request.session['ip'] = ip
-    try:
 
-        reader = geoip2.database.Reader(r'.\GeoLite2-City.mmdb')
-        response = reader.city(ip)
-        country = response.country.name
-        state = response.subdivisions.most_specific.name
-        city = response.city.name
-        pin = response.postal.code
-        lat = response.location.latitude
-        lon = response.location.longitude
-        address = f'{city},{state},{country},{pin},{lat},{lon}'
-        request.session['address'] = address
-    except:
-        pass
+    reader = geoip2.database.Reader(r'.\GeoLite2-City.mmdb')
+    response = reader.city(ip)
+    country = response.country.name
+    state = response.subdivisions.most_specific.name
+    city = response.city.name
+    pin = response.postal.code
+    lat = response.location.latitude
+    lon = response.location.longitude
+    address = f'{city},{state},{country},{pin},{lat},{lon}'
+    request.session['address'] = address
 
     my_dict = {
         'color': 'bodyclass',
