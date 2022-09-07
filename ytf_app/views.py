@@ -318,7 +318,9 @@ def fbsearch(request):
             a = req.read()
 
             a = wget.download(urls, SAVE_PATH)
+            print("file path -------->", a)
             files = os.path.basename(a)
+            print(files)
             with open(f'{SAVE_PATH}/{a}', encoding="utf8") as f:
                 content = f.read()
                 supe = BeautifulSoup(content, 'html5lib')
