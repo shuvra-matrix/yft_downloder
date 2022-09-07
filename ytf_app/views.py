@@ -291,7 +291,8 @@ def fbsearch(request):
         x = re.match(
             r'^(https:|)[/][/]www.([^/]+[.])*facebook.com', PRODUCT_URL)
         y = re.match(r'^(https:|)[/][/]www.([^/]+[.])*fb.watch', PRODUCT_URL)
-        if x or y:
+        z = re.match(r'^(https:|)[/][/]([^/]+[.])*fb.watch', PRODUCT_URL)
+        if x and y and z:
             try:
                 header = {'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36 Edg/91.0.864.48",
                           'Accept-Language': "en-US,en;q=0.9"}
