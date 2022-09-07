@@ -317,11 +317,13 @@ def fbsearch(request):
             response = requests.request(
                 "GET", url, headers=headers, params=querystring)
             a = response.text.split(',')
-
             sd_link = a[0].replace('{"sd":', "")
+            sd_link = sd_link.replace('"', "")
             thumb = a[3].replace('"thumbnail":', "")
             thumb = thumb.replace('}', "")
+            thumb = thumb.replace('"', "")
             title = a[2].replace('"title":', "")
+            title = title.replace('"', "")
             filename = wget.download(sd_link, SAVE_PATH)
             newfilename = filename.replace('./media/', '')
             rand = randint(1, 8909)
