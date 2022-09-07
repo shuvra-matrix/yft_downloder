@@ -1,0 +1,32 @@
+{% extends 'header.html' %} {% block body_block %}
+<div class="admin_main">
+  <div class="title">
+    <p>All Details About Uses Who Use This Applicaion To Download Videos</p>
+  </div>
+
+  <div class="admin_tab">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">IP</th>
+          <th scope="col">Address</th>
+          <th scope="col">Download Link</th>
+          <th scope="col">Download Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if user %} {% for i in user %}
+        <tr>
+          <td>{{i.user_id}}</td>
+          <td>{{i.ip_add}}</td>
+          <td>{{i.download_link}}</td>
+          <td>{{i.location}}</td>
+          <td>{{i.download_type}}</td>
+        </tr>
+        {% endfor %} {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

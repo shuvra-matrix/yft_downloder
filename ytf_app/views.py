@@ -153,7 +153,7 @@ def ytdownload(request):
         ip = request.session.get('ip')
         address = request.session.get('address')
         insert_ip = User_details.objects.create(
-            ip_add=ip, location=address, download_link=link)
+            ip_add=ip, location=address, download_link=link, download_type='Youtube Videos')
 
         return render(request, 'ytdownload.html', context=my_dict)
     return redirect('/')
@@ -259,7 +259,7 @@ def ytmsearch(request):
             ip = request.session.get('ip')
             address = request.session.get('address')
             insert_ip = User_details.objects.create(
-                ip_add=ip, location=address, download_link=link)
+                ip_add=ip, location=address, download_link=link, download_type='Youtube Music')
         except:
             mess = 'Server Error'
             my_dict = {
@@ -311,7 +311,7 @@ def fbsearch(request):
                 ip = request.session.get('ip')
                 address = request.session.get('address')
                 insert_ip = User_details.objects.create(
-                    ip_add=ip, location=address, download_link=PRODUCT_URL)
+                    ip_add=ip, location=address, download_link=PRODUCT_URL, download_type='Facebook Videos')
 
                 return render(request, 'fbsearch.html', context=my_dict)
             except:
@@ -340,3 +340,12 @@ def twisearch(request):
         'color': 'twi_body'
     }
     return render(request, 'twisearch.html', context=my_dict)
+
+
+def admins(request):
+    user_detais = User_details.objects.all()
+    my_dict = {
+        'color': 'bodyclass',
+        'user': user_detais,
+    }
+    return render(request, 'admins.html', context=my_dict)

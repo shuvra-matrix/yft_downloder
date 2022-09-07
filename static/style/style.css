@@ -167,9 +167,17 @@ svg {
 
 }
 
+.admin_main {
+    width: 85%;
+    margin: 4px auto;
 
+}
 
+.admin_tab {
+    width: 100%;
 
+    overflow: scroll;
+}
 
 
 
