@@ -19,6 +19,7 @@ from pathlib import Path
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
 
 
 def cloud_upload(dc, fileid):
@@ -315,10 +316,13 @@ def fbsearch(request):
             # print(req.text)
             # supe = BeautifulSoup(req.text, 'lxml')
             #
-            driver = webdriver.Chrome(ChromeDriverManager().install())
+            options = Options()
 
-            driver.set_window_size(1024, 600)
-            driver.maximize_window()
+            options.add_argument('--no-sandbox')
+            options.add_argument("--headless")
+            options.add_argument('--disable-dev-shm-usage')
+            driver = webdriver.Chrome(
+                ChromeDriverManager().install(), options=options)
             driver.get(PRODUCT_URL)
             elem = driver.find_element(
                 By.XPATH, "//meta[@property='og:video:url']")
