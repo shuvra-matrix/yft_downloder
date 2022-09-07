@@ -11,6 +11,9 @@ import wget
 from bs4 import BeautifulSoup
 import requests
 import lxml
+import socket
+import geoip2.database
+from .models import User_details
 
 
 def cloud_upload(dc, fileid):
@@ -38,6 +41,30 @@ def cloud_upload(dc, fileid):
 
 
 def index(request):
+    ip = ''
+    address = ''
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    request.session['ip'] = ip
+    try:
+
+        reader = geoip2.database.Reader(r'.\GeoLite2-City.mmdb')
+        response = reader.city(ip)
+        country = response.country.name
+        state = response.subdivisions.most_specific.name
+        city = response.city.name
+        pin = response.postal.code
+        lat = response.location.latitude
+        lon = response.location.longitude
+        address = f'{city},{state},{country},{pin},{lat},{lon}'
+        request.session['address'] = address
+    except:
+        pass
+
     my_dict = {
         'color': 'bodyclass',
     }
@@ -57,7 +84,11 @@ def ytdownload(request):
         quality_list = []
         size_list = []
         link = request.POST.get('link')
-        if 'youtu' not in link:
+        x = re.match(
+            r'^(https:|)[/][/]www.([^/]+[.])*youtube.com', link)
+        y = re.match(r'^(https:|)[/][/]([^/]+[.])*youtu.be', link)
+
+        if y == None and x == None:
             mess = 'Please Enter Valid Youtube Link'
             my_dict = {
                 'color': 'ytclass',
@@ -119,6 +150,10 @@ def ytdownload(request):
             'thumb': thumb,
             'size': size_list,
         }
+        ip = request.session.get('ip')
+        address = request.session.get('address')
+        insert_ip = User_details.objects.create(
+            ip_add=ip, location=address, download_link=link)
 
         return render(request, 'ytdownload.html', context=my_dict)
     return redirect('/')
@@ -135,11 +170,11 @@ def yvdown(request):
         thumb = request.POST.get('thumb')
         try:
             yt = YouTube(link)
-            link = yt.streams.filter(res=reg, progressive=True).first()
+            links = yt.streams.filter(res=reg, progressive=True).first()
             rand = randint(1, 8909)
             filename = f'video{rand}.mp4'
             fileid = f'video{rand}'
-            dc = link.download(SAVE_PATH, filename=filename)
+            dc = links.download(SAVE_PATH, filename=filename)
 
             url = cloud_upload(dc, fileid)
 
@@ -176,7 +211,10 @@ def ytmsearch(request):
         SAVE_PATH = "./media"
         dc = None
         link = request.POST.get('link')
-        if 'youtu' not in link:
+        x = re.match(
+            r'^(https:|)[/][/]www.([^/]+[.])*youtube.com', link)
+        y = re.match(r'^(https:|)[/][/]([^/]+[.])*youtu.be', link)
+        if y == None and x == None:
             mess = 'Please Enter Valid Youtube Link'
             my_dict = {
                 'color': 'yt_body',
@@ -196,7 +234,6 @@ def ytmsearch(request):
                 only_audio=True, abr='128kbps').first()
             music_size = round((yt.streams.filter(
                 only_audio=True, abr='128kbps').first().filesize)/1000000)
-            print(music_size)
             if music_size > 100:
                 mess = 'FILE SIZE IS TOO LARGE'
                 my_dict = {
@@ -209,7 +246,6 @@ def ytmsearch(request):
             filename = f'audio{rand}.mp3'
             fileid = f'audio{rand}'
             dc = music_list.download(SAVE_PATH, filename=filename)
-            print(dc)
             url = cloud_upload(dc, filename)
 
             mydict = {
@@ -220,6 +256,10 @@ def ytmsearch(request):
                 'size': music_size,
                 'length': length,
             }
+            ip = request.session.get('ip')
+            address = request.session.get('address')
+            insert_ip = User_details.objects.create(
+                ip_add=ip, location=address, download_link=link)
         except:
             mess = 'Server Error'
             my_dict = {
@@ -255,11 +295,11 @@ def fbsearch(request):
                 supe = BeautifulSoup(req.text, 'lxml')
                 desc = supe.find(
                     'meta', property="og:video:url").attrs['content']
-                print(desc)
+
                 filename = wget.download(desc, SAVE_PATH)
-                print(filename)
+
                 newfilename = filename.replace('./media/', '')
-                print(newfilename)
+
                 rand = randint(1, 8909)
                 fileid = f'video{rand}'
                 url = cloud_upload(filename, fileid)
@@ -268,6 +308,10 @@ def fbsearch(request):
 
                     'url': url
                 }
+                ip = request.session.get('ip')
+                address = request.session.get('address')
+                insert_ip = User_details.objects.create(
+                    ip_add=ip, location=address, download_link=PRODUCT_URL)
 
                 return render(request, 'fbsearch.html', context=my_dict)
             except:
