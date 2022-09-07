@@ -405,29 +405,29 @@ def fbdown(request):
         thumb = request.POST.get('thumb')
         size = request.POST.get('size')
         link = request.POST.get('link')
-        try:
-            filename = wget.download(link, SAVE_PATH)
-            newfilename = filename.replace('./media/', '')
-            rand = randint(1, 8909)
-            fileid = f'video{rand}'
-            url = cloud_upload(filename, fileid)
-            my_dict = {
-                'color': 'fb_body',
-                'url': url,
-                'title': title,
-                'thumb': thumb,
-                'size': size,
-            }
-            return render(request, 'fbdown.html', context=my_dict)
-        except:
-            mess = 'Server Error'
-            my_dict = {
-                'grddient': 'grddient',
-                'color': 'fb_body',
-                'mess': mess
-            }
+        # try:
+        filename = wget.download(link, SAVE_PATH)
+        newfilename = filename.replace('./media/', '')
+        rand = randint(1, 8909)
+        fileid = f'video{rand}'
+        url = cloud_upload(filename, fileid)
+        my_dict = {
+            'color': 'fb_body',
+            'url': url,
+            'title': title,
+            'thumb': thumb,
+            'size': size,
+        }
+        return render(request, 'fbdown.html', context=my_dict)
+        # except:
+        #     mess = 'Server Error'
+        #     my_dict = {
+        #         'grddient': 'grddient',
+        #         'color': 'fb_body',
+        #         'mess': mess
+        #     }
 
-            return render(request, 'fbsearch.html', context=my_dict)
+        #     return render(request, 'fbsearch.html', context=my_dict)
 
     return redirect('/fbsearch')
 
