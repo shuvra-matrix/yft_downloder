@@ -294,6 +294,8 @@ def fbsearch(request):
             r'^(https:|)[/][/]www.([^/]+[.])*facebook.com', PRODUCT_URL)
         y = re.match(r'^(https:|)[/][/]www.([^/]+[.])*fb.watch', PRODUCT_URL)
         z = re.match(r'^(https:|)[/][/]*fb.watch', PRODUCT_URL)
+        w = re.match(
+            r'^(https:|)[/][/]m.([^/]+[.])*facebook.com', PRODUCT_URL)
         print(z)
         if x == None and y == None and z == None:
             mess = 'Please Enter Valid Facebook Link'
