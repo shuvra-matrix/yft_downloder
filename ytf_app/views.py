@@ -310,14 +310,18 @@ def fbsearch(request):
         else:
             try:
                 print(PRODUCT_URL)
+                header = {
+                    'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36 Edg/91.0.864.48", 'Accept-Language': "en-US,en;q=0.9"}
                 response = requ.urlopen(PRODUCT_URL)
                 new_url = response.geturl()
                 print(new_url)
                 urls = new_url.replace('www', 'mobile')
                 print(urls)
-                a = fbdown.get(urls)
+                new = requests.get(urls, headers=header)
+                print(new)
+                a = fbdown.get(new)
                 print(a.text)
-                d = fbdown.getdownlink(urls)
+                d = fbdown.getdownlink(new)
                 print(d)
                 filename = wget.download(d, SAVE_PATH)
 
