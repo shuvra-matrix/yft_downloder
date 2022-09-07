@@ -90,7 +90,7 @@ def ytdownload(request):
         y = re.match(r'^(https:|)[/][/]([^/]+[.])*youtu.be', link)
         z = re.match(
             r'^(https:|)[/][/]([^/]+[.])*youtube.com', link)
-        if y == None and x == None and Z == None:
+        if y == None and x == None and z == None:
             mess = 'Please Enter Valid Youtube Link'
             my_dict = {
                 'color': 'ytclass',
@@ -218,7 +218,7 @@ def ytmsearch(request):
         y = re.match(r'^(https:|)[/][/]([^/]+[.])*youtu.be', link)
         z = re.match(
             r'^(https:|)[/][/]([^/]+[.])*youtube.com', link)
-        if y == None and x == None and Z == None:
+        if y == None and x == None and z == None:
             mess = 'Please Enter Valid Youtube Link'
             my_dict = {
                 'color': 'yt_body',
