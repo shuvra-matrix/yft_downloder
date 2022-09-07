@@ -34,7 +34,7 @@ def cloud_upload(dc, fileid):
 
     urls = f'media\\{files}'
     filelist = glob.glob(os.path.join(dir, "*"))
-    print('file url----------', url)
+    print('file url----------', urls)
     for f in filelist:
         print('file---------', f)
         if f == urls:
