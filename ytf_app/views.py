@@ -8,9 +8,7 @@ import cloudinary.uploader
 import cloudinary.api
 import re
 import wget
-from bs4 import BeautifulSoup
 import requests
-import lxml
 import socket
 import geoip2.database
 from .models import User_details
@@ -288,7 +286,8 @@ def fbsearch(request):
     }
 
     if request.method == 'POST':
-        SAVE_PATH = "./media"
+        BASE_DIR = Path(__file__).resolve().parent.parent
+        SAVE_PATH = os.path.join(BASE_DIR, 'media')
         PRODUCT_URL = request.POST.get('link')
         x = re.match(
             r'^(https:|)[/][/]www.([^/]+[.])*facebook.com', PRODUCT_URL)
@@ -306,32 +305,44 @@ def fbsearch(request):
 
         else:
             try:
-                header = {'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36 Edg/91.0.864.48",
-                          'Accept-Language': "en-US,en;q=0.9"}
-                req = requests.get(PRODUCT_URL)
-                supe = BeautifulSoup(req.text, 'lxml')
-                print(supe)
-                desc = supe.find(
-                    'meta', property="og:video:url").attrs['content']
+                url = "https://fb-dl.p.rapidapi.com/"
 
-                filename = wget.download(desc, SAVE_PATH)
+                querystring = {
+                    "url": "https://fb.watch/fnGSTn3A7R/"}
 
+                headers = {
+                    "X-RapidAPI-Key": "a1408669c6msh81873aaa94d74b0p1575dfjsn0bf62c16c6fa",
+                    "X-RapidAPI-Host": "fb-dl.p.rapidapi.com"
+                }
+
+                response = requests.request(
+                    "GET", url, headers=headers, params=querystring)
+                a = response.text.split(',')
+                sd_link = a[0].replace('{"sd":', "")
+                sd_link = sd_link.replace('"', "")
+                thumb = a[3].replace('"thumbnail":', "")
+                thumb = thumb.replace('}', "")
+                thumb = thumb.replace('"', "")
+                title = a[2].replace('"title":', "")
+                title = title.replace('"', "")
+                filename = wget.download(sd_link, SAVE_PATH)
                 newfilename = filename.replace('./media/', '')
-
                 rand = randint(1, 8909)
                 fileid = f'video{rand}'
                 url = cloud_upload(filename, fileid)
                 my_dict = {
                     'color': 'fb_body',
 
-                    'url': url
+                    'url': url,
+                    'title': title,
+                    'thumb': thumb,
                 }
                 ip = request.session.get('ip')
                 address = request.session.get('address')
                 insert_ip = User_details.objects.create(
                     ip_add=ip, location=address, download_link=PRODUCT_URL, download_type='Facebook Videos')
 
-                return render(request, 'fbsearch.html', context=my_dict)
+                return render(request, 'fbdown.html', context=my_dict)
             except:
                 mess = 'Server Error'
                 my_dict = {
