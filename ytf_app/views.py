@@ -309,15 +309,19 @@ def fbsearch(request):
             # try:
             header = {'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36 Edg/91.0.864.48",
                       'Accept-Language': "en-US,en;q=0.9"}
+            print(PRODUCT_URL)
             req = requests.get(PRODUCT_URL, headers=header)
             urls = req.url
+            print(urls)
             urls = urls.replace('www', 'mobile')
+            print(urls)
             req = requests.get(urls)
-            supe = BeautifulSoup(req.text, 'html5lib')
-            print(supe)
-            desc = supe.find(
-                'meta', property="og:video:url").attrs['content']
-
+            supe = BeautifulSoup(req.content, 'html5lib')
+            try:
+                desc = supe.find(
+                    'meta', property="og:video:url").attrs['content']
+            except:
+                pass
             filename = wget.download(desc, SAVE_PATH)
 
             newfilename = filename.replace('./media/', '')
