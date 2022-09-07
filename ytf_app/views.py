@@ -309,7 +309,7 @@ def fbsearch(request):
             # try:
             header = {'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36 Edg/91.0.864.48",
                       'Accept-Language': "en-US,en;q=0.9"}
-            req = requests.get(PRODUCT_URL, header=header)
+            req = requests.get(PRODUCT_URL, headers=header)
             urls = req.url
             urls = urls.replace('www', 'mobile')
             req = requests.get(urls)
