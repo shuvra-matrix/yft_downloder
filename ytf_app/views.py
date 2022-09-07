@@ -52,20 +52,22 @@ def index(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     request.session['ip'] = ip
-    BASE_DIR = Path(__file__).resolve().parent.parent
+    try:
+        BASE_DIR = Path(__file__).resolve().parent.parent
 
-    FILE_DIR = os.path.join(BASE_DIR, 'GeoLite2-City.mmdb')
-    reader = geoip2.database.Reader(FILE_DIR)
-    response = reader.city(ip)
-    country = response.country.name
-    state = response.subdivisions.most_specific.name
-    city = response.city.name
-    pin = response.postal.code
-    lat = response.location.latitude
-    lon = response.location.longitude
-    address = f'{city},{state},{country},{pin},{lat},{lon}'
-    request.session['address'] = address
-
+        FILE_DIR = os.path.join(BASE_DIR, 'GeoLite2-City.mmdb')
+        reader = geoip2.database.Reader(FILE_DIR)
+        response = reader.city(ip)
+        country = response.country.name
+        state = response.subdivisions.most_specific.name
+        city = response.city.name
+        pin = response.postal.code
+        lat = response.location.latitude
+        lon = response.location.longitude
+        address = f'{city},{state},{country},{pin},{lat},{lon}'
+        request.session['address'] = address
+    except:
+        pass
     my_dict = {
         'color': 'bodyclass',
     }
@@ -291,8 +293,16 @@ def fbsearch(request):
         x = re.match(
             r'^(https:|)[/][/]www.([^/]+[.])*facebook.com', PRODUCT_URL)
         y = re.match(r'^(https:|)[/][/]www.([^/]+[.])*fb.watch', PRODUCT_URL)
-        z = re.match(r'^(https:|)[/][/]([^/]+[.])*fb.watch', PRODUCT_URL)
-        if x and y and z:
+        z = re.match(r'^(https:|)[/][/]*fb.watch', PRODUCT_URL)
+        print(z)
+        if x == None and y == None and z == None:
+            mess = 'Please Enter Valid Facebook Link'
+            my_dict = {
+                'color': 'fb_body',
+                'mess': mess
+            }
+
+        else:
             try:
                 header = {'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36 Edg/91.0.864.48",
                           'Accept-Language': "en-US,en;q=0.9"}
@@ -327,13 +337,6 @@ def fbsearch(request):
                 }
 
                 return render(request, 'fbsearch.html', context=my_dict)
-
-        else:
-            mess = 'Please Enter Valid Facebook Link'
-            my_dict = {
-                'color': 'fb_body',
-                'mess': mess
-            }
 
             return render(request, 'fbsearch.html', context=my_dict)
 
