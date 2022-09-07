@@ -316,7 +316,7 @@ def fbsearch(request):
                 urls = new_url.replace('www', 'mobile')
                 print(urls)
                 a = fbdown.get(urls)
-                print(a)
+                print(a.text)
                 d = fbdown.getdownlink(urls)
                 print(d)
                 filename = wget.download(d, SAVE_PATH)
