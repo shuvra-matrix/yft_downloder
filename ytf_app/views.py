@@ -73,6 +73,11 @@ def index(request):
 
 
 def ydown(request):
+    if request.session.has_key('ip'):
+        pass
+    else:
+        return redirect('/')
+
     my_dict = {
         'color': 'ytclass',
     }
@@ -206,6 +211,11 @@ def yvdown(request):
 
 
 def ytmusic(request):
+    if request.session.has_key('ip'):
+        pass
+    else:
+        return redirect('/')
+
     my_dict = {
         'color': 'yt_body',
     }
@@ -285,6 +295,12 @@ def ytmsearch(request):
 
 
 def fbsearch(request):
+
+    if request.session.has_key('ip'):
+        pass
+    else:
+        return redirect('/')
+
     PRODUCT_URL = ''
     my_dict = {
         'color': 'fb_body',
@@ -431,6 +447,11 @@ def fbdown(request):
 
 
 def twisearch(request):
+    if request.session.has_key('ip'):
+        pass
+    else:
+        return redirect('/')
+
     my_dict = {
         'color': 'twi_body'
     }
@@ -438,6 +459,11 @@ def twisearch(request):
 
 
 def admins(request):
+    if request.session.has_key('ip'):
+        pass
+    else:
+        return redirect('/')
+
     user_detais = User_details.objects.all()
     my_dict = {
         'color': 'bodyclass',
