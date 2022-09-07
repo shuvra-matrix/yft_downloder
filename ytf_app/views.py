@@ -37,6 +37,7 @@ def cloud_upload(dc, fileid):
     for f in filelist:
         if f == urls:
             os.remove(f)
+            print("hi")
     return url
 
 
@@ -347,8 +348,6 @@ def fbsearch(request):
                     pass
 
                 if sd_size > 100 and hd_size > 100:
-                    print(sd_size)
-                    print(hd_size)
                     mess = 'File Size Is Too Large'
                     my_dict = {
                         'grddient': 'grddient',
