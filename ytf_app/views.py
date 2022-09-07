@@ -310,13 +310,13 @@ def fbsearch(request):
             try:
                 print(PRODUCT_URL)
                 response = requ.urlopen(PRODUCT_URL)
-                print(response)
                 new_url = response.geturl()
                 print(new_url)
                 urls = new_url.replace('www', 'mobile')
                 print(urls)
-                req = requ.urlopen(urls)
-                supe = BeautifulSoup(req.content, 'html5lib')
+                req = requests.get(urls)
+                print(req.text)
+                supe = BeautifulSoup(req.text, 'html5lib')
                 print(supe)
                 try:
                     desc = supe.find(
