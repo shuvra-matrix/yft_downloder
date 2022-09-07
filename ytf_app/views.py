@@ -17,6 +17,7 @@ from .models import User_details
 import os
 from pathlib import Path
 import html5lib
+from urllib import request as requ
 
 
 def cloud_upload(dc, fileid):
@@ -307,13 +308,16 @@ def fbsearch(request):
 
         else:
             # try:
-            header = {'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36 Edg/91.0.864.48",
-                      'Accept-Language': "en-US,en;q=0.9"}
+            # header = {'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36 Edg/91.0.864.48",
+            #           'Accept-Language': "en-US,en;q=0.9"}
             print(PRODUCT_URL)
-            req = requests.get(PRODUCT_URL, headers=header)
-            urls = req.url
-            print(urls)
-            urls = urls.replace('www', 'mobile')
+            # req = requests.get(PRODUCT_URL, headers=header)
+            # urls = req.url
+            response = requ.urlopen(PRODUCT_URL)
+            print(response)
+            new_url = response.geturl()
+            print(new_url)
+            urls = new_url.replace('www', 'mobile')
             print(urls)
             req = requests.get(urls)
             supe = BeautifulSoup(req.content, 'html5lib')
