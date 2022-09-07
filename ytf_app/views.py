@@ -294,8 +294,10 @@ def fbsearch(request):
             r'^(https:|)[/][/]www.([^/]+[.])*facebook.com', PRODUCT_URL)
         y = re.match(r'^(https:|)[/][/]www.([^/]+[.])*fb.watch', PRODUCT_URL)
         z = re.match(r'^(https:|)[/][/]*fb.watch', PRODUCT_URL)
-        print(z)
-        if x == None and y == None and z == None:
+        w = re.match(
+            r'^(https:|)[/][/]m.([^/]+[.])*facebook.com', PRODUCT_URL)
+
+        if x == None and y == None and z == None and w == None:
             mess = 'Please Enter Valid Facebook Link'
             my_dict = {
                 'color': 'fb_body',
