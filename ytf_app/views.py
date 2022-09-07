@@ -296,7 +296,7 @@ def fbsearch(request):
         z = re.match(r'^(https:|)[/][/]*fb.watch', PRODUCT_URL)
         w = re.match(
             r'^(https:|)[/][/]m.([^/]+[.])*facebook.com', PRODUCT_URL)
-        print(z)
+
         if x == None and y == None and z == None and w == None:
             mess = 'Please Enter Valid Facebook Link'
             my_dict = {
@@ -310,6 +310,7 @@ def fbsearch(request):
                           'Accept-Language': "en-US,en;q=0.9"}
                 req = requests.get(PRODUCT_URL)
                 supe = BeautifulSoup(req.text, 'lxml')
+                print(supe)
                 desc = supe.find(
                     'meta', property="og:video:url").attrs['content']
 
