@@ -11,3 +11,4 @@ lxml==4.9.1
 geoip2==4.6.0
 html5lib==1.1
 urllib3==1.26.12
+fb-down==1.0.1

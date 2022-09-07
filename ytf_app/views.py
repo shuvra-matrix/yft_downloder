@@ -18,6 +18,7 @@ import os
 from pathlib import Path
 import html5lib
 from urllib import request as requ
+import fbdown
 
 
 def cloud_upload(dc, fileid):
@@ -311,27 +312,11 @@ def fbsearch(request):
                 print(PRODUCT_URL)
                 response = requ.urlopen(PRODUCT_URL)
                 new_url = response.geturl()
-
                 urls = new_url.replace('www', 'mobile')
-
-                req = requ.urlopen(urls)
-                a = req.read()
-                filepath = './'
-                a = wget.download(new_url, filepath)
-                print("file path -------->", a)
-                files = os.path.basename(a)
-                print(files)
-                with open(f'{filepath}/{a}', encoding="utf8") as f:
-                    content = f.read()
-                    supe = BeautifulSoup(content, 'html5lib')
-                    print(supe)
-                try:
-                    desc = supe.find(
-                        'meta', property="og:video:url").attrs['content']
-                except:
-                    pass
-
-                filename = wget.download(desc, SAVE_PATH)
+                a = fbdown.get(new_url)
+                d = fbdown.getdownlink(new_url)
+                print(d)
+                filename = wget.download(d, SAVE_PATH)
 
                 newfilename = filename.replace('./media/', '')
 
