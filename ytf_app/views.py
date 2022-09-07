@@ -14,6 +14,8 @@ import lxml
 import socket
 import geoip2.database
 from .models import User_details
+import os
+from pathlib import Path
 
 
 def cloud_upload(dc, fileid):
@@ -51,8 +53,10 @@ def index(request):
         ip = request.META.get('REMOTE_ADDR')
     request.session['ip'] = ip
     try:
+        BASE_DIR = Path(__file__).resolve().parent.parent
 
-        reader = geoip2.database.Reader(r'.\GeoLite2-City.mmdb')
+        FILE_DIR = os.path.join(BASE_DIR, 'GeoLite2-City.mmdb')
+        reader = geoip2.database.Reader(FILE_DIR)
         response = reader.city(ip)
         country = response.country.name
         state = response.subdivisions.most_specific.name
@@ -64,7 +68,6 @@ def index(request):
         request.session['address'] = address
     except:
         pass
-
     my_dict = {
         'color': 'bodyclass',
     }
@@ -87,8 +90,9 @@ def ytdownload(request):
         x = re.match(
             r'^(https:|)[/][/]www.([^/]+[.])*youtube.com', link)
         y = re.match(r'^(https:|)[/][/]([^/]+[.])*youtu.be', link)
-
-        if y == None and x == None:
+        z = re.match(
+            r'^(https:|)[/][/]([^/]+[.])*youtube.com', link)
+        if y == None and x == None and z == None:
             mess = 'Please Enter Valid Youtube Link'
             my_dict = {
                 'color': 'ytclass',
@@ -214,7 +218,9 @@ def ytmsearch(request):
         x = re.match(
             r'^(https:|)[/][/]www.([^/]+[.])*youtube.com', link)
         y = re.match(r'^(https:|)[/][/]([^/]+[.])*youtu.be', link)
-        if y == None and x == None:
+        z = re.match(
+            r'^(https:|)[/][/]([^/]+[.])*youtube.com', link)
+        if y == None and x == None and z == None:
             mess = 'Please Enter Valid Youtube Link'
             my_dict = {
                 'color': 'yt_body',
@@ -287,7 +293,16 @@ def fbsearch(request):
         x = re.match(
             r'^(https:|)[/][/]www.([^/]+[.])*facebook.com', PRODUCT_URL)
         y = re.match(r'^(https:|)[/][/]www.([^/]+[.])*fb.watch', PRODUCT_URL)
-        if x or y:
+        z = re.match(r'^(https:|)[/][/]*fb.watch', PRODUCT_URL)
+        print(z)
+        if x == None and y == None and z == None:
+            mess = 'Please Enter Valid Facebook Link'
+            my_dict = {
+                'color': 'fb_body',
+                'mess': mess
+            }
+
+        else:
             try:
                 header = {'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36 Edg/91.0.864.48",
                           'Accept-Language': "en-US,en;q=0.9"}
@@ -322,13 +337,6 @@ def fbsearch(request):
                 }
 
                 return render(request, 'fbsearch.html', context=my_dict)
-
-        else:
-            mess = 'Please Enter Valid Facebook Link'
-            my_dict = {
-                'color': 'fb_body',
-                'mess': mess
-            }
 
             return render(request, 'fbsearch.html', context=my_dict)
 
