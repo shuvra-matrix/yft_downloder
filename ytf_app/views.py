@@ -32,7 +32,7 @@ def cloud_upload(dc, fileid):
     url = upload_result['url']
     dir = 'media'
 
-    urls = f'media\\{files}'
+    urls = f'media//{files}'
     filelist = glob.glob(os.path.join(dir, "*"))
     print('file url----------', urls)
     for f in filelist:
