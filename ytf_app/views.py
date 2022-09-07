@@ -16,10 +16,6 @@ import geoip2.database
 from .models import User_details
 import os
 from pathlib import Path
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
 
 
 def cloud_upload(dc, fileid):
@@ -300,8 +296,8 @@ def fbsearch(request):
         z = re.match(r'^(https:|)[/][/]*fb.watch', PRODUCT_URL)
         w = re.match(
             r'^(https:|)[/][/]m.([^/]+[.])*facebook.com', PRODUCT_URL)
-
-        if x == None and y == None and z == None and w == None:
+        print(z)
+        if x == None and y == None and z == None:
             mess = 'Please Enter Valid Facebook Link'
             my_dict = {
                 'color': 'fb_body',
@@ -309,51 +305,40 @@ def fbsearch(request):
             }
 
         else:
+            try:
+                header = {'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36 Edg/91.0.864.48",
+                          'Accept-Language': "en-US,en;q=0.9"}
+                req = requests.get(PRODUCT_URL)
+                supe = BeautifulSoup(req.text, 'lxml')
+                desc = supe.find(
+                    'meta', property="og:video:url").attrs['content']
 
-            # header = {'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36 Edg/91.0.864.48",
-            #           'Accept-Language': "en-US,en;q=0.9"}
-            # req = requests.get(PRODUCT_URL)
-            # print(req.text)
-            # supe = BeautifulSoup(req.text, 'lxml')
-            #
-            options = Options()
+                filename = wget.download(desc, SAVE_PATH)
 
-            options.add_argument('--no-sandbox')
-            options.add_argument("--headless")
-            options.add_argument('--disable-dev-shm-usage')
-            driver = webdriver.Chrome(
-                ChromeDriverManager().install(), options=options)
-            driver.get(PRODUCT_URL)
-            elem = driver.find_element(
-                By.XPATH, "//meta[@property='og:video:url']")
-            desc = elem.get_attribute("content")
+                newfilename = filename.replace('./media/', '')
 
-            filename = wget.download(desc, SAVE_PATH)
+                rand = randint(1, 8909)
+                fileid = f'video{rand}'
+                url = cloud_upload(filename, fileid)
+                my_dict = {
+                    'color': 'fb_body',
 
-            newfilename = filename.replace('./media/', '')
+                    'url': url
+                }
+                ip = request.session.get('ip')
+                address = request.session.get('address')
+                insert_ip = User_details.objects.create(
+                    ip_add=ip, location=address, download_link=PRODUCT_URL, download_type='Facebook Videos')
 
-            rand = randint(1, 8909)
-            fileid = f'video{rand}'
-            url = cloud_upload(filename, fileid)
-            my_dict = {
-                'color': 'fb_body',
+                return render(request, 'fbsearch.html', context=my_dict)
+            except:
+                mess = 'Server Error'
+                my_dict = {
+                    'color': 'fb_body',
+                    'mess': mess
+                }
 
-                'url': url
-            }
-            ip = request.session.get('ip')
-            address = request.session.get('address')
-            insert_ip = User_details.objects.create(
-                ip_add=ip, location=address, download_link=PRODUCT_URL, download_type='Facebook Videos')
-
-            return render(request, 'fbsearch.html', context=my_dict)
-
-            mess = 'Server Error'
-            my_dict = {
-                'color': 'fb_body',
-                'mess': mess
-            }
-
-            return render(request, 'fbsearch.html', context=my_dict)
+                return render(request, 'fbsearch.html', context=my_dict)
 
             return render(request, 'fbsearch.html', context=my_dict)
 
