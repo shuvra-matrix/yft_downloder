@@ -9,7 +9,6 @@ import cloudinary.api
 import re
 import wget
 import requests
-import lxml
 import socket
 import geoip2.database
 from .models import User_details
