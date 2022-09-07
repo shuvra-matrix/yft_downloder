@@ -311,44 +311,78 @@ def fbsearch(request):
             }
 
         else:
-            # try:
-            url = "https://fb-dl.p.rapidapi.com/"
-
-            querystring = {
-                "url": PRODUCT_URL}
-
-            headers = {
-                "X-RapidAPI-Key": "a1408669c6msh81873aaa94d74b0p1575dfjsn0bf62c16c6fa",
-                "X-RapidAPI-Host": "fb-dl.p.rapidapi.com"
-            }
-
-            response = requests.request(
-                "GET", url, headers=headers, params=querystring)
-
-            a = response.text.split(',')
-            sd_link = a[0].replace('{"sd":', "")
-            sd_link = sd_link.replace('"', "")
-            hd_link = None
-            hd_size = None
-            # try:
-            file = urllib.request.urlopen(
-                sd_link)
-            sd_size = round((file.length)/1000000)
-
-            # except:
-            #     pass
             try:
-                hd_link = a[1].replace('"hd":', "")
-                hd_link = hd_link.replace('"', "")
+                url = "https://fb-dl.p.rapidapi.com/"
 
-                file = urllib.request.urlopen(
-                    hd_link)
-                hd_size = round((file.length)/1000000)
+                querystring = {
+                    "url": PRODUCT_URL}
+
+                headers = {
+                    "X-RapidAPI-Key": "f7ebfecc75msh8d2238ff681eab2p12875fjsnef270c921738",
+                    "X-RapidAPI-Host": "fb-dl.p.rapidapi.com"
+                }
+
+                response = requests.request(
+                    "GET", url, headers=headers, params=querystring)
+
+                a = response.text.split(',')
+                sd_link = a[0].replace('{"sd":', "")
+                sd_link = sd_link.replace('"', "")
+                hd_link = None
+                hd_size = None
+                try:
+                    file = urllib.request.urlopen(
+                        sd_link)
+                    sd_size = round((file.length)/1000000)
+
+                except:
+                    pass
+                try:
+                    hd_link = a[1].replace('"hd":', "")
+                    hd_link = hd_link.replace('"', "")
+
+                    file = urllib.request.urlopen(
+                        hd_link)
+                    hd_size = round((file.length)/1000000)
+                except:
+                    pass
+
+                if sd_size > 100 and hd_size > 100:
+                    mess = 'File Size Is Too Large'
+                    my_dict = {
+                        'grddient': 'grddient',
+                        'color': 'fb_body',
+                        'mess': mess
+                    }
+
+                    return render(request, 'fbsearch.html', context=my_dict)
+
+                thumb = a[-1].replace('"thumbnail":', "")
+
+                thumb = thumb.replace('}', "")
+                thumb = thumb.replace('"', "")
+
+                title = a[2].replace('"title":', "")
+                title = title.replace('"', "")
+
+                my_dict = {
+                    'color': 'fb_body',
+
+                    'sd_url': sd_link,
+                    'sd_size': sd_size,
+                    'hd_link': hd_link,
+                    'hd_size': hd_size,
+                    'title': title,
+                    'thumb': thumb,
+                }
+                ip = request.session.get('ip')
+                address = request.session.get('address')
+                insert_ip = User_details.objects.create(
+                    ip_add=ip, location=address, download_link=PRODUCT_URL, download_type='Facebook Videos')
+
+                return render(request, 'fbselect.html', context=my_dict)
             except:
-                pass
-
-            if sd_size > 100 and hd_size > 100:
-                mess = 'File Size Is Too Large'
+                mess = 'Server Error'
                 my_dict = {
                     'grddient': 'grddient',
                     'color': 'fb_body',
@@ -357,41 +391,7 @@ def fbsearch(request):
 
                 return render(request, 'fbsearch.html', context=my_dict)
 
-            thumb = a[-1].replace('"thumbnail":', "")
-
-            thumb = thumb.replace('}', "")
-            thumb = thumb.replace('"', "")
-
-            title = a[2].replace('"title":', "")
-            title = title.replace('"', "")
-
-            my_dict = {
-                'color': 'fb_body',
-
-                'sd_url': sd_link,
-                'sd_size': sd_size,
-                'hd_link': hd_link,
-                'hd_size': hd_size,
-                'title': title,
-                'thumb': thumb,
-            }
-            ip = request.session.get('ip')
-            address = request.session.get('address')
-            insert_ip = User_details.objects.create(
-                ip_add=ip, location=address, download_link=PRODUCT_URL, download_type='Facebook Videos')
-
-            return render(request, 'fbselect.html', context=my_dict)
-            # except:
-            #     mess = 'Server Error'
-            #     my_dict = {
-            #         'grddient': 'grddient',
-            #         'color': 'fb_body',
-            #         'mess': mess
-            #     }
-
-            #     return render(request, 'fbsearch.html', context=my_dict)
-
-            # return render(request, 'fbsearch.html', context=my_dict)
+            return render(request, 'fbsearch.html', context=my_dict)
 
     return render(request, 'fbsearch.html', context=my_dict)
 
