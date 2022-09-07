@@ -286,7 +286,8 @@ def fbsearch(request):
     }
 
     if request.method == 'POST':
-        SAVE_PATH = "./media"
+        BASE_DIR = Path(__file__).resolve().parent.parent
+        SAVE_PATH = os.path.join(BASE_DIR, 'media')
         PRODUCT_URL = request.POST.get('link')
         x = re.match(
             r'^(https:|)[/][/]www.([^/]+[.])*facebook.com', PRODUCT_URL)
