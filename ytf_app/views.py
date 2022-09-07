@@ -318,10 +318,10 @@ def fbsearch(request):
                 urls = new_url.replace('www', 'mobile')
                 print(urls)
                 new = requests.get(urls, headers=header)
-                print(new)
-                a = fbdown.get(new)
+                print(new.text)
+                a = fbdown.get(new, headers=header)
                 print(a.text)
-                d = fbdown.getdownlink(new)
+                d = fbdown.getdownlink(new, headers=header)
                 print(d)
                 filename = wget.download(d, SAVE_PATH)
 
