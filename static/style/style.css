@@ -45,54 +45,60 @@ body {
     background-color: #cd99fe !important;
     border-color: #cd99fe !important;
 
+
+}
+
+
+.grddient {
+    background: -webkit-linear-gradient(left, #0000003b 100%, #0000004f 0%, #00000000 0%);
 }
 
 .ytclass {
-    background: #f85032 !important;
+    background-color: #f85032;
     /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #e73827, #f85032) !important;
+    background-color: -webkit-linear-gradient(to right, #e73827, #f85032);
     /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #e73827, #f85032) !important;
+    background-color: linear-gradient(to right, #e73827, #f85032);
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
 }
 
 .ytdown {
-    background: #f79d00 !important;
+    background-color: #f79d00;
     /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #64f38c, #f79d00) !important;
+    background-color: -webkit-linear-gradient(to right, #64f38c, #f79d00);
     /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #64f38c, #f79d00) !important;
+    background-color: linear-gradient(to right, #64f38c, #f79d00);
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
 }
 
 .yt_body {
-    background: #F00000 !important;
+    background-color: #F00000;
     /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #DC281E, #F00000) !important;
+    background-color: -webkit-linear-gradient(to right, #DC281E, #F00000);
     /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #DC281E, #F00000) !important;
+    background-color: linear-gradient(to right, #DC281E, #F00000);
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
 }
 
 .ytmdowns {
-    background: #6a3093 !important;
+    background-color: #6a3093;
     /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #a044ff, #6a3093) !important;
+    background-color: -webkit-linear-gradient(to right, #a044ff, #6a3093);
     /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #a044ff, #6a3093) !important;
+    background-color: linear-gradient(to right, #a044ff, #6a3093);
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
 }
 
 .twi_body {
-    background: rgb(26, 152, 229) !important;
+    background-color: rgb(26, 152, 229);
 }
 
 .fb_body {
-    background: rgb(17, 150, 245) !important;
+    background-color: rgb(17, 150, 245);
 }
 
 .bg-light {
@@ -272,18 +278,19 @@ p {
 
 .warning_main {
     position: relative;
-    background-color: white;
-    color: black;
+
+    color: rgb(224, 11, 11);
     width: 25%;
     margin: auto;
     top: 150px;
-    padding: 2rem;
+    padding: 3rem 2rem;
     border-radius: 8px;
     text-align: center;
     border-width: 2px;
-    border-color: #500d01;
+    border-color: #3c383f;
     border-style: solid;
-    box-shadow: 0px 0px 8px rgb(65, 65, 65);
+    box-shadow: 1px 1px 12px rgb(30 24 24);
+    background: rgba(238, 235, 241, 0.966);
 
 
 
@@ -295,10 +302,16 @@ p {
     right: 10px;
     border: 3px;
     border-style: solid;
-    border-color: #200402;
+    border-color: #3b3636;
     padding: 5px 10px;
     border-radius: 8px;
+    background: rgb(239, 236, 241);
 
+}
+
+.cros:hover {
+    background: rgb(58, 56, 59);
+    color: white;
 }
 
 .warning_message {

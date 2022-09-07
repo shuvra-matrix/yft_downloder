@@ -9,7 +9,6 @@ import cloudinary.api
 import re
 import wget
 import requests
-import socket
 import geoip2.database
 from .models import User_details
 import os
@@ -94,6 +93,7 @@ def ytdownload(request):
         if y == None and x == None and z == None:
             mess = 'Please Enter Valid Youtube Link'
             my_dict = {
+                'grddient': 'grddient',
                 'color': 'ytclass',
                 'mess': mess
             }
@@ -112,6 +112,7 @@ def ytdownload(request):
         except:
             mess = 'Server Error'
             my_dict = {
+                'grddient': 'grddient',
                 'color': 'ytclass',
                 'mess': mess
             }
@@ -138,6 +139,7 @@ def ytdownload(request):
         if len(quality_list) == 0:
             mess = 'File Size Is Too Large'
             my_dict = {
+                'grddient': 'grddient',
                 'color': 'ytclass',
                 'mess': mess
             }
@@ -184,6 +186,7 @@ def yvdown(request):
         except:
             mess = 'Server Error'
             my_dict = {
+                'grddient': 'grddient',
                 'color': 'ytclass',
                 'mess': mess
             }
@@ -222,6 +225,7 @@ def ytmsearch(request):
         if y == None and x == None and z == None:
             mess = 'Please Enter Valid Youtube Link'
             my_dict = {
+                'grddient': 'grddient',
                 'color': 'yt_body',
                 'mess': mess
             }
@@ -242,6 +246,7 @@ def ytmsearch(request):
             if music_size > 100:
                 mess = 'FILE SIZE IS TOO LARGE'
                 my_dict = {
+                    'grddient': 'grddient',
                     'color': 'yt_body',
                     'mess': mess
                 }
@@ -268,6 +273,7 @@ def ytmsearch(request):
         except:
             mess = 'Server Error'
             my_dict = {
+                'grddient': 'grddient',
                 'color': 'yt_body',
                 'mess': mess
             }
@@ -298,6 +304,7 @@ def fbsearch(request):
         if x == None and y == None and z == None and w == None:
             mess = 'Please Enter Valid Facebook Link'
             my_dict = {
+                'grddient': 'grddient',
                 'color': 'fb_body',
                 'mess': mess
             }
@@ -344,6 +351,7 @@ def fbsearch(request):
                     print(hd_size)
                     mess = 'File Size Is Too Large'
                     my_dict = {
+                        'grddient': 'grddient',
                         'color': 'fb_body',
                         'mess': mess
                     }
@@ -377,6 +385,7 @@ def fbsearch(request):
             except:
                 mess = 'Server Error'
                 my_dict = {
+                    'grddient': 'grddient',
                     'color': 'fb_body',
                     'mess': mess
                 }
@@ -397,19 +406,30 @@ def fbdown(request):
         thumb = request.POST.get('thumb')
         size = request.POST.get('size')
         link = request.POST.get('link')
-        filename = wget.download(link, SAVE_PATH)
-        newfilename = filename.replace('./media/', '')
-        rand = randint(1, 8909)
-        fileid = f'video{rand}'
-        url = cloud_upload(filename, fileid)
-        my_dict = {
-            'color': 'fb_body',
-            'url': url,
-            'title': title,
-            'thumb': thumb,
-            'size': size,
-        }
-        return render(request, 'fbdown.html', context=my_dict)
+        try:
+            filename = wget.download(link, SAVE_PATH)
+            newfilename = filename.replace('./media/', '')
+            rand = randint(1, 8909)
+            fileid = f'video{rand}'
+            url = cloud_upload(filename, fileid)
+            my_dict = {
+                'color': 'fb_body',
+                'url': url,
+                'title': title,
+                'thumb': thumb,
+                'size': size,
+            }
+            return render(request, 'fbdown.html', context=my_dict)
+        except:
+            mess = 'Server Error'
+            my_dict = {
+                'grddient': 'grddient',
+                'color': 'fb_body',
+                'mess': mess
+            }
+
+            return render(request, 'fbsearch.html', context=my_dict)
+
     return redirect('/fbsearch')
 
 
