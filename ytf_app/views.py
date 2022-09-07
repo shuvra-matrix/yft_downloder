@@ -311,25 +311,30 @@ def fbsearch(request):
 
         else:
             try:
-                url = "https://fb-dl.p.rapidapi.com/"
+                url = "https://aiov-download-youtube-videos.p.rapidapi.com/GetVideoDetails"
 
                 querystring = {
-                    "url": PRODUCT_URL}
+                    "URL": PRODUCT_URL}
 
                 headers = {
-                    "X-RapidAPI-Key": "f7ebfecc75msh8d2238ff681eab2p12875fjsnef270c921738",
-                    "X-RapidAPI-Host": "fb-dl.p.rapidapi.com"
+                    "X-RapidAPI-Key": "53db47703bmsh43337a6ff98140ep1d9019jsnfa4b3f6ce92b",
+                    "X-RapidAPI-Host": "aiov-download-youtube-videos.p.rapidapi.com"
                 }
 
                 response = requests.request(
                     "GET", url, headers=headers, params=querystring)
 
-                a = response.text.split(',')
-                sd_link = a[0].replace('{"sd":', "")
-                sd_link = sd_link.replace('"', "")
+                a = response.json()
+
+                duration = a['duration_string']
+                thumb = a['thumbnail']
+                title = a['title']
+                sd_link = None
+                sd_size = None
                 hd_link = None
                 hd_size = None
                 try:
+                    sd_link = a['formats'][2]['url']
                     file = urllib.request.urlopen(
                         sd_link)
                     sd_size = round((file.length)/1000000)
@@ -337,18 +342,17 @@ def fbsearch(request):
                 except:
                     pass
                 try:
-                    hd_link = a[1].replace('"hd":', "")
-                    hd_link = hd_link.replace('"', "")
+                    hd = a['formats'][3]['format_id']
+                    if hd == 'hd':
+                        hd_link = a['formats'][3]['url']
 
-                    file = urllib.request.urlopen(
-                        hd_link)
-                    hd_size = round((file.length)/1000000)
+                        file = urllib.request.urlopen(
+                            hd_link)
+                        hd_size = round((file.length)/1000000)
                 except:
                     pass
 
                 if sd_size > 100 and hd_size > 100:
-                    print(sd_size)
-                    print(hd_size)
                     mess = 'File Size Is Too Large'
                     my_dict = {
                         'grddient': 'grddient',
@@ -357,14 +361,6 @@ def fbsearch(request):
                     }
 
                     return render(request, 'fbsearch.html', context=my_dict)
-
-                thumb = a[-1].replace('"thumbnail":', "")
-
-                thumb = thumb.replace('}', "")
-                thumb = thumb.replace('"', "")
-
-                title = a[2].replace('"title":', "")
-                title = title.replace('"', "")
 
                 my_dict = {
                     'color': 'fb_body',
@@ -375,6 +371,7 @@ def fbsearch(request):
                     'hd_size': hd_size,
                     'title': title,
                     'thumb': thumb,
+                    'duration': duration,
                 }
                 ip = request.session.get('ip')
                 address = request.session.get('address')
