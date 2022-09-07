@@ -315,8 +315,9 @@ def fbsearch(request):
                 urls = new_url.replace('www', 'mobile')
                 print(urls)
                 req = requ.urlopen(urls)
-                print(req)
-                supe = BeautifulSoup(req, 'html5lib')
+                a = req.read()
+                print(a)
+                supe = BeautifulSoup(a, 'html5lib')
                 print(supe)
                 try:
                     desc = supe.find(
