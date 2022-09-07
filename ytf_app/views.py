@@ -330,13 +330,13 @@ def fbsearch(request):
             sd_link = sd_link.replace('"', "")
             hd_link = None
             hd_size = None
-            try:
-                file = urllib.request.urlopen(
-                    sd_link)
-                sd_size = round((file.length)/1000000)
+            # try:
+            file = urllib.request.urlopen(
+                sd_link)
+            sd_size = round((file.length)/1000000)
 
-            except:
-                pass
+            # except:
+            #     pass
             try:
                 hd_link = a[1].replace('"hd":', "")
                 hd_link = hd_link.replace('"', "")
