@@ -317,7 +317,7 @@ def fbsearch(request):
                 print(new_url)
                 urls = new_url.replace('www', 'mobile')
                 print(urls)
-                new = requests.get(urls, headers=header)
+                new = requests.get(new_url, headers=header)
                 print(new.text)
                 a = fbdown.get(new, headers=header)
                 print(a.text)
