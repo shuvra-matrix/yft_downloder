@@ -133,6 +133,7 @@ body {
     flex-wrap: wrap;
     justify-content: space-around;
     text-align: right !important;
+    overflow: hidden;
 }
 
 .div_sub {
@@ -388,13 +389,13 @@ p {
 
 
     .navbar-brand {
-        margin-left: 1rem;
+        margin-left: .7rem;
     }
 
     .main_p {
-        font-size: 1.5rem !important;
+        font-size: 1.3rem !important;
         color: white;
-        padding: 2rem;
+        padding: 1.5rem;
         text-align: left !important;
 
     }

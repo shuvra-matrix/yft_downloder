@@ -14,6 +14,7 @@ import geoip2.database
 from .models import User_details
 import os
 from pathlib import Path
+import urllib.request
 
 
 def cloud_upload(dc, fileid):
@@ -278,7 +279,7 @@ def ytmsearch(request):
 
 
 def fbsearch(request):
-
+    PRODUCT_URL = ''
     my_dict = {
         'color': 'fb_body',
 
@@ -286,8 +287,6 @@ def fbsearch(request):
     }
 
     if request.method == 'POST':
-        BASE_DIR = Path(__file__).resolve().parent.parent
-        SAVE_PATH = os.path.join(BASE_DIR, 'media')
         PRODUCT_URL = request.POST.get('link')
         x = re.match(
             r'^(https:|)[/][/]www.([^/]+[.])*facebook.com', PRODUCT_URL)
@@ -308,7 +307,7 @@ def fbsearch(request):
                 url = "https://fb-dl.p.rapidapi.com/"
 
                 querystring = {
-                    "url": "https://fb.watch/fnGSTn3A7R/"}
+                    "url": PRODUCT_URL}
 
                 headers = {
                     "X-RapidAPI-Key": "a1408669c6msh81873aaa94d74b0p1575dfjsn0bf62c16c6fa",
@@ -317,23 +316,55 @@ def fbsearch(request):
 
                 response = requests.request(
                     "GET", url, headers=headers, params=querystring)
+
                 a = response.text.split(',')
                 sd_link = a[0].replace('{"sd":', "")
                 sd_link = sd_link.replace('"', "")
-                thumb = a[3].replace('"thumbnail":', "")
+                hd_link = None
+                hd_size = None
+                try:
+                    file = urllib.request.urlopen(
+                        sd_link)
+                    sd_size = round((file.length)/1000000)
+
+                except:
+                    pass
+                try:
+                    hd_link = a[1].replace('"hd":', "")
+                    hd_link = hd_link.replace('"', "")
+
+                    file = urllib.request.urlopen(
+                        hd_link)
+                    hd_size = round((file.length)/1000000)
+                except:
+                    pass
+
+                if sd_size > 100 and hd_size > 100:
+                    print(sd_size)
+                    print(hd_size)
+                    mess = 'File Size Is Too Large'
+                    my_dict = {
+                        'color': 'fb_body',
+                        'mess': mess
+                    }
+
+                    return render(request, 'fbsearch.html', context=my_dict)
+
+                thumb = a[-1].replace('"thumbnail":', "")
+
                 thumb = thumb.replace('}', "")
                 thumb = thumb.replace('"', "")
+
                 title = a[2].replace('"title":', "")
                 title = title.replace('"', "")
-                filename = wget.download(sd_link, SAVE_PATH)
-                newfilename = filename.replace('./media/', '')
-                rand = randint(1, 8909)
-                fileid = f'video{rand}'
-                url = cloud_upload(filename, fileid)
+
                 my_dict = {
                     'color': 'fb_body',
 
-                    'url': url,
+                    'sd_url': sd_link,
+                    'sd_size': sd_size,
+                    'hd_link': hd_link,
+                    'hd_size': hd_size,
                     'title': title,
                     'thumb': thumb,
                 }
@@ -342,7 +373,7 @@ def fbsearch(request):
                 insert_ip = User_details.objects.create(
                     ip_add=ip, location=address, download_link=PRODUCT_URL, download_type='Facebook Videos')
 
-                return render(request, 'fbdown.html', context=my_dict)
+                return render(request, 'fbselect.html', context=my_dict)
             except:
                 mess = 'Server Error'
                 my_dict = {
@@ -355,6 +386,31 @@ def fbsearch(request):
             return render(request, 'fbsearch.html', context=my_dict)
 
     return render(request, 'fbsearch.html', context=my_dict)
+
+
+def fbdown(request):
+    link = ''
+    if request.method == 'POST':
+        BASE_DIR = Path(__file__).resolve().parent.parent
+        SAVE_PATH = os.path.join(BASE_DIR, 'media')
+        title = request.POST.get('title')
+        thumb = request.POST.get('thumb')
+        size = request.POST.get('size')
+        link = request.POST.get('link')
+        filename = wget.download(link, SAVE_PATH)
+        newfilename = filename.replace('./media/', '')
+        rand = randint(1, 8909)
+        fileid = f'video{rand}'
+        url = cloud_upload(filename, fileid)
+        my_dict = {
+            'color': 'fb_body',
+            'url': url,
+            'title': title,
+            'thumb': thumb,
+            'size': size,
+        }
+        return render(request, 'fbdown.html', context=my_dict)
+    return redirect('/fbsearch')
 
 
 def twisearch(request):
