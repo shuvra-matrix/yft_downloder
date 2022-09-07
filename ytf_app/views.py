@@ -14,6 +14,7 @@ import lxml
 import socket
 import geoip2.database
 from .models import User_details
+import os
 
 
 def cloud_upload(dc, fileid):
@@ -50,8 +51,10 @@ def index(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     request.session['ip'] = ip
+    BASE_DIR = Path(__file__).resolve().parent.parent
 
-    reader = geoip2.database.Reader(r'.\GeoLite2-City.mmdb')
+    FILE_DIR = os.path.join(BASE_DIR, 'GeoLite2-City.mmdb')
+    reader = geoip2.database.Reader(FILE_DIR)
     response = reader.city(ip)
     country = response.country.name
     state = response.subdivisions.most_specific.name
@@ -84,8 +87,9 @@ def ytdownload(request):
         x = re.match(
             r'^(https:|)[/][/]www.([^/]+[.])*youtube.com', link)
         y = re.match(r'^(https:|)[/][/]([^/]+[.])*youtu.be', link)
-
-        if y == None and x == None:
+        z = re.match(
+            r'^(https:|)[/][/]([^/]+[.])*youtube.com', link)
+        if y == None and x == None and Z == None:
             mess = 'Please Enter Valid Youtube Link'
             my_dict = {
                 'color': 'ytclass',
