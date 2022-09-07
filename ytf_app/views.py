@@ -311,14 +311,18 @@ def fbsearch(request):
                 print(PRODUCT_URL)
                 response = requ.urlopen(PRODUCT_URL)
                 new_url = response.geturl()
-                print(new_url)
+
                 urls = new_url.replace('www', 'mobile')
-                print(urls)
+
                 req = requ.urlopen(urls)
                 a = req.read()
-                print(a)
-                supe = BeautifulSoup(a, 'html5lib')
-                print(supe)
+
+                a = wget.download(urls, SAVE_PATH)
+                files = os.path.basename(a)
+                with open(f'{SAVE_PATH}/{a}', encoding="utf8") as f:
+                    content = f.read()
+                    supe = BeautifulSoup(content, 'html5lib')
+                    print(supe)
                 try:
                     desc = supe.find(
                         'meta', property="og:video:url").attrs['content']
