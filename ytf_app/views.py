@@ -16,6 +16,7 @@ import geoip2.database
 from .models import User_details
 import os
 from pathlib import Path
+import html5lib
 
 
 def cloud_upload(dc, fileid):
@@ -308,11 +309,11 @@ def fbsearch(request):
             # try:
             header = {'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36 Edg/91.0.864.48",
                       'Accept-Language': "en-US,en;q=0.9"}
-            req = requests.get(PRODUCT_URL)
+            req = requests.get(PRODUCT_URL, header=header)
             urls = req.url
             urls = urls.replace('www', 'mobile')
             req = requests.get(urls)
-            supe = BeautifulSoup(req.text, 'lxml')
+            supe = BeautifulSoup(req.text, 'html5lib')
             print(supe)
             desc = supe.find(
                 'meta', property="og:video:url").attrs['content']
