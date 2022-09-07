@@ -307,24 +307,24 @@ def fbsearch(request):
             }
 
         else:
-            # try:
-            print(PRODUCT_URL)
-            response = requ.urlopen(PRODUCT_URL)
-            new_url = response.geturl()
+            try:
+                print(PRODUCT_URL)
+                response = requ.urlopen(PRODUCT_URL)
+                new_url = response.geturl()
 
-            urls = new_url.replace('www', 'mobile')
+                urls = new_url.replace('www', 'mobile')
 
-            req = requ.urlopen(urls)
-            a = req.read()
-            filepath = './'
-            a = wget.download(urls, filepath)
-            print("file path -------->", a)
-            files = os.path.basename(a)
-            print(files)
-            with open(f'{filepath}/{a}', encoding="utf8") as f:
-                content = f.read()
-                supe = BeautifulSoup(content, 'html5lib')
-                print(supe)
+                req = requ.urlopen(urls)
+                a = req.read()
+                filepath = './'
+                a = wget.download(urls, filepath)
+                print("file path -------->", a)
+                files = os.path.basename(a)
+                print(files)
+                with open(f'{filepath}/{a}', encoding="utf8") as f:
+                    content = f.read()
+                    supe = BeautifulSoup(content, 'html5lib')
+                    print(supe)
                 try:
                     desc = supe.find(
                         'meta', property="og:video:url").attrs['content']
@@ -349,14 +349,14 @@ def fbsearch(request):
                     ip_add=ip, location=address, download_link=PRODUCT_URL, download_type='Facebook Videos')
 
                 return render(request, 'fbsearch.html', context=my_dict)
-            # except:
-            #     mess = 'Server Error'
-            #     my_dict = {
-            #         'color': 'fb_body',
-            #         'mess': mess
-            #     }
+            except:
+                mess = 'Server Error'
+                my_dict = {
+                    'color': 'fb_body',
+                    'mess': mess
+                }
 
-            #     return render(request, 'fbsearch.html', context=my_dict)
+                return render(request, 'fbsearch.html', context=my_dict)
 
             return render(request, 'fbsearch.html', context=my_dict)
 
