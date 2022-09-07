@@ -305,44 +305,44 @@ def fbsearch(request):
             }
 
         else:
-            try:
-                header = {'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36 Edg/91.0.864.48",
-                          'Accept-Language': "en-US,en;q=0.9"}
-                req = requests.get(PRODUCT_URL)
-                urls = req.url
-                urls = urls.replace('www', 'mobile')
-                req = requests.get(urls)
-                supe = BeautifulSoup(req.text, 'lxml')
-                print(supe)
-                desc = supe.find(
-                    'meta', property="og:video:url").attrs['content']
+            # try:
+            header = {'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36 Edg/91.0.864.48",
+                      'Accept-Language': "en-US,en;q=0.9"}
+            req = requests.get(PRODUCT_URL)
+            urls = req.url
+            urls = urls.replace('www', 'mobile')
+            req = requests.get(urls)
+            supe = BeautifulSoup(req.text, 'lxml')
+            print(supe)
+            desc = supe.find(
+                'meta', property="og:video:url").attrs['content']
 
-                filename = wget.download(desc, SAVE_PATH)
+            filename = wget.download(desc, SAVE_PATH)
 
-                newfilename = filename.replace('./media/', '')
+            newfilename = filename.replace('./media/', '')
 
-                rand = randint(1, 8909)
-                fileid = f'video{rand}'
-                url = cloud_upload(filename, fileid)
-                my_dict = {
-                    'color': 'fb_body',
+            rand = randint(1, 8909)
+            fileid = f'video{rand}'
+            url = cloud_upload(filename, fileid)
+            my_dict = {
+                'color': 'fb_body',
 
-                    'url': url
-                }
-                ip = request.session.get('ip')
-                address = request.session.get('address')
-                insert_ip = User_details.objects.create(
-                    ip_add=ip, location=address, download_link=PRODUCT_URL, download_type='Facebook Videos')
+                'url': url
+            }
+            ip = request.session.get('ip')
+            address = request.session.get('address')
+            insert_ip = User_details.objects.create(
+                ip_add=ip, location=address, download_link=PRODUCT_URL, download_type='Facebook Videos')
 
-                return render(request, 'fbsearch.html', context=my_dict)
-            except:
-                mess = 'Server Error'
-                my_dict = {
-                    'color': 'fb_body',
-                    'mess': mess
-                }
+            return render(request, 'fbsearch.html', context=my_dict)
+            # except:
+            # mess = 'Server Error'
+            # my_dict = {
+            #     'color': 'fb_body',
+            #     'mess': mess
+            # }
 
-                return render(request, 'fbsearch.html', context=my_dict)
+            # return render(request, 'fbsearch.html', context=my_dict)
 
             return render(request, 'fbsearch.html', context=my_dict)
 
