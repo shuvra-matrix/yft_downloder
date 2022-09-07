@@ -303,53 +303,53 @@ def fbsearch(request):
             }
 
         else:
-            try:
-                url = "https://fb-dl.p.rapidapi.com/"
+            # try:
+            url = "https://fb-dl.p.rapidapi.com/"
 
-                querystring = {
-                    "url": "https://fb.watch/fnGSTn3A7R/"}
+            querystring = {
+                "url": "https://fb.watch/fnGSTn3A7R/"}
 
-                headers = {
-                    "X-RapidAPI-Key": "a1408669c6msh81873aaa94d74b0p1575dfjsn0bf62c16c6fa",
-                    "X-RapidAPI-Host": "fb-dl.p.rapidapi.com"
-                }
+            headers = {
+                "X-RapidAPI-Key": "a1408669c6msh81873aaa94d74b0p1575dfjsn0bf62c16c6fa",
+                "X-RapidAPI-Host": "fb-dl.p.rapidapi.com"
+            }
 
-                response = requests.request(
-                    "GET", url, headers=headers, params=querystring)
-                a = response.text.split(',')
+            response = requests.request(
+                "GET", url, headers=headers, params=querystring)
+            a = response.text.split(',')
 
-                sd_link = a[0].replace('{"sd":', "")
-                thumb = a[3].replace('"thumbnail":', "")
-                thumb = thumb.replace('}', "")
-                title = a[2].replace('"title":', "")
-                filename = wget.download(sd_link, SAVE_PATH)
-                newfilename = filename.replace('./media/', '')
-                rand = randint(1, 8909)
-                fileid = f'video{rand}'
-                url = cloud_upload(filename, fileid)
-                my_dict = {
-                    'color': 'fb_body',
+            sd_link = a[0].replace('{"sd":', "")
+            thumb = a[3].replace('"thumbnail":', "")
+            thumb = thumb.replace('}', "")
+            title = a[2].replace('"title":', "")
+            filename = wget.download(sd_link, SAVE_PATH)
+            newfilename = filename.replace('./media/', '')
+            rand = randint(1, 8909)
+            fileid = f'video{rand}'
+            url = cloud_upload(filename, fileid)
+            my_dict = {
+                'color': 'fb_body',
 
-                    'url': url,
-                    'title': title,
-                    'thumb': thumb,
-                }
-                ip = request.session.get('ip')
-                address = request.session.get('address')
-                insert_ip = User_details.objects.create(
-                    ip_add=ip, location=address, download_link=PRODUCT_URL, download_type='Facebook Videos')
+                'url': url,
+                'title': title,
+                'thumb': thumb,
+            }
+            ip = request.session.get('ip')
+            address = request.session.get('address')
+            insert_ip = User_details.objects.create(
+                ip_add=ip, location=address, download_link=PRODUCT_URL, download_type='Facebook Videos')
 
-                return render(request, 'fbdown.html', context=my_dict)
-            except:
-                mess = 'Server Error'
-                my_dict = {
-                    'color': 'fb_body',
-                    'mess': mess
-                }
+            return render(request, 'fbdown.html', context=my_dict)
+            # except:
+            #     mess = 'Server Error'
+            #     my_dict = {
+            #         'color': 'fb_body',
+            #         'mess': mess
+            #     }
 
-                return render(request, 'fbsearch.html', context=my_dict)
+            #     return render(request, 'fbsearch.html', context=my_dict)
 
-            return render(request, 'fbsearch.html', context=my_dict)
+            # return render(request, 'fbsearch.html', context=my_dict)
 
     return render(request, 'fbsearch.html', context=my_dict)
 
