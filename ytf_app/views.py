@@ -15,6 +15,7 @@ import socket
 import geoip2.database
 from .models import User_details
 import os
+from pathlib import Path
 
 
 def cloud_upload(dc, fileid):
@@ -215,7 +216,9 @@ def ytmsearch(request):
         x = re.match(
             r'^(https:|)[/][/]www.([^/]+[.])*youtube.com', link)
         y = re.match(r'^(https:|)[/][/]([^/]+[.])*youtu.be', link)
-        if y == None and x == None:
+        z = re.match(
+            r'^(https:|)[/][/]([^/]+[.])*youtube.com', link)
+        if y == None and x == None and Z == None:
             mess = 'Please Enter Valid Youtube Link'
             my_dict = {
                 'color': 'yt_body',
