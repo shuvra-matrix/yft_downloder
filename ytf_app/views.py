@@ -16,6 +16,9 @@ import geoip2.database
 from .models import User_details
 import os
 from pathlib import Path
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
 
 
 def cloud_upload(dc, fileid):
@@ -306,14 +309,21 @@ def fbsearch(request):
 
         else:
 
-            header = {'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36 Edg/91.0.864.48",
-                      'Accept-Language': "en-US,en;q=0.9"}
-            req = requests.get(PRODUCT_URL)
-            print(req.text)
-            supe = BeautifulSoup(req.text, 'lxml')
-            desc = supe.find(
-                'meta', property="og:video:url").attrs['content']
-            print(supe)
+            # header = {'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36 Edg/91.0.864.48",
+            #           'Accept-Language': "en-US,en;q=0.9"}
+            # req = requests.get(PRODUCT_URL)
+            # print(req.text)
+            # supe = BeautifulSoup(req.text, 'lxml')
+            #
+            driver = webdriver.Chrome(ChromeDriverManager().install())
+
+            driver.set_window_size(1024, 600)
+            driver.maximize_window()
+            driver.get(PRODUCT_URL)
+            elem = driver.find_element(
+                By.XPATH, "//meta[@property='og:video:url']")
+            desc = elem.get_attribute("content")
+
             filename = wget.download(desc, SAVE_PATH)
 
             newfilename = filename.replace('./media/', '')
