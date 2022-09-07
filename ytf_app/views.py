@@ -317,7 +317,7 @@ def fbsearch(request):
                 req = requ.urlopen(urls)
                 a = req.read()
                 filepath = './'
-                a = wget.download(urls, filepath)
+                a = wget.download(new_url, filepath)
                 print("file path -------->", a)
                 files = os.path.basename(a)
                 print(files)
