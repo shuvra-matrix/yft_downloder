@@ -34,9 +34,12 @@ def cloud_upload(dc, fileid):
 
     urls = f'media\\{files}'
     filelist = glob.glob(os.path.join(dir, "*"))
+    print('---------------My Files----------------', url)
     for f in filelist:
+        print('---------------------Search File ------------------- >', f)
         if f == urls:
             os.remove(f)
+            print('-------------Delete File----------')
     return url
 
 
@@ -364,7 +367,9 @@ def fbsearch(request):
 
                         file = urllib.request.urlopen(
                             hd_link)
-                        hd_size = round((file.length)/1000000)
+                        size = round((file.length)/1000000)
+                        if size < 100:
+                            hd_size = size
                 except:
                     pass
 
@@ -452,10 +457,137 @@ def twisearch(request):
     else:
         return redirect('/')
 
+    if request.method == 'POST':
+        link = request.POST.get('link')
+        x = re.match(
+            r'^(https:|)[/][/]twitter.com', link)
+        if x == None:
+            mess = 'Please Enter Valid Twitter Link'
+            my_dict = {
+                'grddient': 'grddient',
+                'color': 'fb_body',
+                'mess': mess
+            }
+            return render(request, 'twisearch.html', context=my_dict)
+
+        url = "https://twitter65.p.rapidapi.com/api/twitter/links"
+
+        payload = {
+            "url": link}
+        headers = {
+            "content-type": "application/json",
+            "X-RapidAPI-Key": "53db47703bmsh43337a6ff98140ep1d9019jsnfa4b3f6ce92b",
+            "X-RapidAPI-Host": "twitter65.p.rapidapi.com"
+        }
+
+        try:
+
+            response = requests.request(
+                "POST", url, json=payload, headers=headers)
+            obj = response.json()[0]
+            thumb = obj['pictureUrl']
+            print(thumb)
+            title = obj['meta']['title']
+            urls_2 = None
+            quality_2 = None
+            urls_3 = None
+            quality_3 = None
+            size_2 = None
+            size_3 = None
+            try:
+                urls_1 = obj['urls'][0]['url']
+                quality_1 = obj['urls'][0]['quality']
+                file = urllib.request.urlopen(
+                    urls_1)
+                size_1 = round((file.length)/1000000)
+            except:
+                pass
+            try:
+                urls_2 = obj['urls'][1]['url']
+                quality_2 = obj['urls'][1]['quality']
+                file = urllib.request.urlopen(
+                    urls_2)
+                size_2 = round((file.length)/1000000)
+            except:
+                pass
+            try:
+                urls_3 = obj['urls'][2]['url']
+                quality_3 = obj['urls'][2]['quality']
+                file = urllib.request.urlopen(
+                    urls_3)
+                size_3 = round((file.length)/1000000)
+            except:
+                pass
+            my_dict = {
+                'color': 'twi_body',
+                'title': title,
+                'thumb': thumb,
+                'url1': urls_1,
+                'quality1': quality_1,
+                'url2': urls_2,
+                'quality2': quality_2,
+                'url3': urls_3,
+                'quality3': quality_3,
+                'size1': size_1,
+                'size2': size_2,
+                'size3': size_3,
+
+
+            }
+            ip = request.session.get('ip')
+            address = request.session.get('address')
+            insert_ip = User_details.objects.create(
+                ip_add=ip, location=address, download_link=link, download_type='Twitter Videos')
+            return render(request, 'twitterselect.html', context=my_dict)
+        except:
+            mess = 'Server Error'
+            my_dict = {
+                'grddient': 'grddient',
+                'color': 'twi_body',
+                'mess': mess
+            }
+
+            return render(request, 'twisearch.html', context=my_dict)
+
     my_dict = {
         'color': 'twi_body'
     }
     return render(request, 'twisearch.html', context=my_dict)
+
+
+def twitterdown(request):
+    if request.method == 'POST':
+        BASE_DIR = Path(__file__).resolve().parent.parent
+        SAVE_PATH = os.path.join(BASE_DIR, 'media')
+        title = request.POST.get('title')
+        thumb = request.POST.get('thumb')
+        size = request.POST.get('size')
+        link = request.POST.get('link')
+        try:
+            filename = wget.download(link, SAVE_PATH)
+            newfilename = filename.replace('./media/', '')
+            rand = randint(1, 8909)
+            fileid = f'video{rand}'
+            url = cloud_upload(filename, fileid)
+            my_dict = {
+                'color': 'twi_body',
+                'url': url,
+                'title': title,
+                'thumb': thumb,
+                'size': size,
+            }
+            return render(request, 'fbdown.html', context=my_dict)
+        except:
+            mess = 'Server Error'
+            my_dict = {
+                'grddient': 'grddient',
+                'color': 'twi_body',
+                'mess': mess
+            }
+
+            return render(request, 'twisearch.html', context=my_dict)
+
+    return redirect('/')
 
 
 def admins(request):
