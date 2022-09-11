@@ -40,6 +40,7 @@ def cloud_upload(dc, fileid):
         if f == urls:
             os.remove(f)
             print('-------------Delete File----------')
+            break
     return url
 
 
@@ -507,7 +508,9 @@ def twisearch(request):
                 quality_2 = obj['urls'][1]['quality']
                 file = urllib.request.urlopen(
                     urls_2)
-                size_2 = round((file.length)/1000000)
+                a = round((file.length)/1000000)
+                if a < 100:
+                    size_2 = a
             except:
                 pass
             try:
@@ -515,9 +518,22 @@ def twisearch(request):
                 quality_3 = obj['urls'][2]['quality']
                 file = urllib.request.urlopen(
                     urls_3)
-                size_3 = round((file.length)/1000000)
+                b = round((file.length)/1000000)
+                if b < 100:
+                    size_3 = b
             except:
                 pass
+
+            if size_1 > 100 and size_2 > 100 and size_3 > 100:
+                mess = 'File Size Is Too Large'
+                my_dict = {
+                    'grddient': 'grddient',
+                    'color': 'twi_body',
+                    'mess': mess
+                }
+
+                return render(request, 'twisearch.html', context=my_dict)
+
             my_dict = {
                 'color': 'twi_body',
                 'title': title,
