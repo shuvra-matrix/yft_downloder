@@ -15,7 +15,13 @@ urlpatterns = [
     path('downloadyt', views.yvdown, name='yvdown'),
     path('ytmusic', views.ytmusic, name='ytmusic'),
     path('ytmsearch', views.ytmsearch, name='ytmsearch'),
+    path('fbsearch', views.fbsearch, name='fbsearch'),
+    path('twitter_search', views.twisearch, name='twisearch'),
+    path('admins', views.admins, name='admins'),
+    path('fbdown', views.fbdown, name='fbdown'),
+    path('twitter_down', views.twitterdown, name='twitterdown'),
     path('offline/', TemplateView.as_view(template_name="offline.html")),
+
 ]
 
 

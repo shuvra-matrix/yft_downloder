@@ -1,12 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lobster&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+html {
+    scroll-behavior: smooth;
+}
 
 body {
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
-    font-family: 'Bebas Neue', cursive !important;
+    font-family: "Inter", sans-serif !important;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.527) !important;
-
+    font-weight: normal;
+    font-style: normal;
+    color: #888;
+    font-size: 15px;
 
 }
 
@@ -27,54 +35,70 @@ body {
 
 
 .bodyclass {
-    overflow: hidden;
-    background: #9D50BB !important;
+
+    /* background: #9D50BB !important;
     /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #6E48AA, #9D50BB) !important;
+    /* background: -webkit-linear-gradient(to right, #6E48AA, #9D50BB) !important; */
     /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #6E48AA, #9D50BB) !important;
+    /* background: linear-gradient(to right, #6E48AA, #9D50BB) !important;
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background-color: #cd99fe !important;
+    border-color: #cd99fe !important;
+
 
 }
 
+
+.grddient {
+    background: -webkit-linear-gradient(left, #00000050 100%, #0000004f 0%, #00000000 0%);
+}
+
 .ytclass {
-    background: #f85032 !important;
+    background-color: #f85032;
     /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #e73827, #f85032) !important;
+    background-color: -webkit-linear-gradient(to right, #e73827, #f85032);
     /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #e73827, #f85032) !important;
+    background-color: linear-gradient(to right, #e73827, #f85032);
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
 }
 
 .ytdown {
-    background: #f79d00 !important;
+    background-color: #f79d00;
     /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #64f38c, #f79d00) !important;
+    background-color: -webkit-linear-gradient(to right, #64f38c, #f79d00);
     /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #64f38c, #f79d00) !important;
+    background-color: linear-gradient(to right, #64f38c, #f79d00);
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
 }
 
 .yt_body {
-    background: #F00000 !important;
+    background-color: #F00000;
     /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #DC281E, #F00000) !important;
+    background-color: -webkit-linear-gradient(to right, #DC281E, #F00000);
     /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #DC281E, #F00000) !important;
+    background-color: linear-gradient(to right, #DC281E, #F00000);
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
 }
 
 .ytmdowns {
-    background: #6a3093 !important;
+    background-color: #6a3093;
     /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #a044ff, #6a3093) !important;
+    background-color: -webkit-linear-gradient(to right, #a044ff, #6a3093);
     /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #a044ff, #6a3093) !important;
+    background-color: linear-gradient(to right, #a044ff, #6a3093);
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
+}
+
+.twi_body {
+    background-color: rgb(26, 152, 229);
+}
+
+.fb_body {
+    background-color: rgb(17, 150, 245);
 }
 
 .bg-light {
@@ -83,20 +107,86 @@ body {
 
 .navbar-brand {
     color: white !important;
-    font-size: 2.3rem !important;
-    font-family: 'Bebas Neue', cursive !important;
+    font-size: 2rem !important;
+    font-family: "Inter",
+        sans-serif !important;
+    margin-left: 3rem;
+}
+
+.navbar-collapse {
+    margin-left: 2rem;
 }
 
 .nav-link {
     color: white !important;
-    font-size: 1.5rem !important;
-    font-family: 'Bebas Neue', cursive !important;
+    font-size: 1.2rem !important;
+    font-family: "Inter",
+        sans-serif !important;
 }
 
 .yt_main {
     width: 60%;
-    margin: 5rem auto;
+    margin: 4rem auto;
 }
+
+
+.div_main {
+
+    height: 100%;
+    margin: 0px auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    text-align: right !important;
+    overflow: hidden;
+}
+
+.div_sub {
+    height: 100%;
+    width: 46%;
+    margin: 0px auto;
+    flex: 46%;
+    margin: 20px;
+
+
+}
+
+.svg {
+    width: 46%;
+    flex: 46%;
+    margin-left: 10px;
+    text-align: center;
+    margin-bottom: 3rem;
+
+}
+
+svg {
+    height: 90%;
+    width: 90%;
+}
+
+.main_p {
+    font-size: 2rem !important;
+    color: white;
+    padding: 3rem;
+    text-align: left !important;
+
+}
+
+.admin_main {
+    width: 85%;
+    margin: 4px auto;
+
+}
+
+.admin_tab {
+    width: 100%;
+
+    overflow: scroll;
+}
+
+
 
 .maindown {
     width: 70%;
@@ -161,12 +251,13 @@ p {
 }
 
 .yt_p {
-    font-family: 'Lobster', cursive;
-    font-size: 4.5rem;
-    margin-bottom: 3rem;
-    -webkit-text-stroke-width: 1px;
-    -webkit-text-stroke-color: rgb(223, 207, 207);
-    color: #200402;
+    font-family: 'Lobster',
+        cursive;
+    font-size: 4rem;
+    margin-bottom: 2rem;
+    color: #fff;
+    text-shadow: 0px 3px 8px #00000017;
+    text-transform: capitalize;
 }
 
 .link {
@@ -187,18 +278,19 @@ p {
 
 .warning_main {
     position: relative;
-    background-color: white;
-    color: black;
+
+    color: rgb(224, 11, 11);
     width: 25%;
     margin: auto;
     top: 150px;
-    padding: 2rem;
+    padding: 3rem 2rem;
     border-radius: 8px;
     text-align: center;
     border-width: 2px;
-    border-color: #500d01;
+    border-color: #3c383f;
     border-style: solid;
-    box-shadow: 0px 0px 8px rgb(65, 65, 65);
+    box-shadow: 1px 1px 12px rgb(30 24 24);
+    background: rgba(238, 235, 241, 0.966);
 
 
 
@@ -210,10 +302,16 @@ p {
     right: 10px;
     border: 3px;
     border-style: solid;
-    border-color: #200402;
+    border-color: #3b3636;
     padding: 5px 10px;
     border-radius: 8px;
+    background: rgb(239, 236, 241);
 
+}
+
+.cros:hover {
+    background: rgb(58, 56, 59);
+    color: white;
 }
 
 .warning_message {
@@ -262,8 +360,9 @@ p {
 
     .yt_p {
         font-family: 'Lobster', cursive;
-        font-size: 3rem;
+        font-size: 2.5rem;
         margin-bottom: 3rem;
+        color: white;
     }
 
     .warning_main {
@@ -300,6 +399,24 @@ p {
         margin: 2rem auto;
         text-align: center;
     }
+
+
+    .navbar-brand {
+        margin-left: .7rem;
+    }
+
+    .main_p {
+        font-size: 1.3rem !important;
+        color: white;
+        padding: 1.5rem;
+        text-align: left !important;
+
+    }
+
+    .icon {
+        width: 60px !important;
+    }
+
 
 }
 

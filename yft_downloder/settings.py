@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-!@assc!vx+b81aypnm!60r+7dylfa2fh=#d!!5)8p3r((2k5j(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ytfdown.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = ['ytfdown.herokuapp.com']
 
 
 # Application definition
@@ -187,8 +187,8 @@ PWA_CONFIG = {
         }
     ],
     "description": "Download Videos and Music From Youtube, Facebook, Twitter",
-    "version": "0.1",
-    "manifest_version": "0.1",
+    "version": "2",
+    "manifest_version": "0.2",
     "permissions": [
         "notifications",
         "webRequest"

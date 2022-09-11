@@ -2,9 +2,9 @@ let click = document.querySelector(".cros");
 
 let warnng = document.querySelector(".warning_main");
 
-console.log("hewl");
+let bodys = document.querySelector("body");
 
 click.addEventListener("click", () => {
-  console.log("hiujijihj");
   warnng.classList.add("hidden_message");
+  bodys.classList.remove("grddient");
 });

@@ -7,10 +7,18 @@
   <div class="img">
     <img src="{{thumb}}" alt="" />
   </div>
+  <div class="length" style="color: white !important">
+    <p>Length : {{length}}</p>
+  </div>
   <div class="link">
-    <a class="down" href="media/{{url}}" target="_blank">
+    <a class="down" href="{{url}}" target="_blank">
       Download 128kbps {{size}} MB</a
     >
+  </div>
+  <div style="margin-top: 1.5rem">
+    <p style="color: white !important">
+      After Download Remove .mp4 From File Name
+    </p>
   </div>
 </div>
 {% endif %} {% endblock %}
