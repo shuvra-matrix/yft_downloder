@@ -368,21 +368,10 @@ def fbsearch(request):
 
                         file = urllib.request.urlopen(
                             hd_link)
-                        size = round((file.length)/1000000)
-                        if size < 100:
-                            hd_size = size
+                        hd_size = round((file.length)/1000000)
+
                 except:
                     pass
-
-                if sd_size > 100 and hd_size > 100:
-                    mess = 'File Size Is Too Large'
-                    my_dict = {
-                        'grddient': 'grddient',
-                        'color': 'fb_body',
-                        'mess': mess
-                    }
-
-                    return render(request, 'fbsearch.html', context=my_dict)
 
                 my_dict = {
                     'color': 'fb_body',
@@ -395,6 +384,7 @@ def fbsearch(request):
                     'thumb': thumb,
                     'duration': duration,
                 }
+
                 ip = request.session.get('ip')
                 address = request.session.get('address')
                 insert_ip = User_details.objects.create(
@@ -414,42 +404,6 @@ def fbsearch(request):
             return render(request, 'fbsearch.html', context=my_dict)
 
     return render(request, 'fbsearch.html', context=my_dict)
-
-
-def fbdown(request):
-    link = ''
-    if request.method == 'POST':
-        BASE_DIR = Path(__file__).resolve().parent.parent
-        SAVE_PATH = os.path.join(BASE_DIR, 'media')
-        title = request.POST.get('title')
-        thumb = request.POST.get('thumb')
-        size = request.POST.get('size')
-        link = request.POST.get('link')
-        try:
-            filename = wget.download(link, SAVE_PATH)
-            newfilename = filename.replace('./media/', '')
-            rand = randint(1, 8909)
-            fileid = f'video{rand}'
-            url = cloud_upload(filename, fileid)
-            my_dict = {
-                'color': 'fb_body',
-                'url': url,
-                'title': title,
-                'thumb': thumb,
-                'size': size,
-            }
-            return render(request, 'fbdown.html', context=my_dict)
-        except:
-            mess = 'Server Error'
-            my_dict = {
-                'grddient': 'grddient',
-                'color': 'fb_body',
-                'mess': mess
-            }
-
-            return render(request, 'fbsearch.html', context=my_dict)
-
-    return redirect('/fbsearch')
 
 
 def twisearch(request):
@@ -508,9 +462,8 @@ def twisearch(request):
                 quality_2 = obj['urls'][1]['quality']
                 file = urllib.request.urlopen(
                     urls_2)
-                a = round((file.length)/1000000)
-                if a < 100:
-                    size_2 = a
+                size_2 = round((file.length)/1000000)
+
             except:
                 pass
             try:
@@ -518,21 +471,10 @@ def twisearch(request):
                 quality_3 = obj['urls'][2]['quality']
                 file = urllib.request.urlopen(
                     urls_3)
-                b = round((file.length)/1000000)
-                if b < 100:
-                    size_3 = b
+                size_3 = round((file.length)/1000000)
+
             except:
                 pass
-
-            if size_1 > 100 and size_2 > 100 and size_3 > 100:
-                mess = 'File Size Is Too Large'
-                my_dict = {
-                    'grddient': 'grddient',
-                    'color': 'twi_body',
-                    'mess': mess
-                }
-
-                return render(request, 'twisearch.html', context=my_dict)
 
             my_dict = {
                 'color': 'twi_body',
@@ -569,41 +511,6 @@ def twisearch(request):
         'color': 'twi_body'
     }
     return render(request, 'twisearch.html', context=my_dict)
-
-
-def twitterdown(request):
-    if request.method == 'POST':
-        BASE_DIR = Path(__file__).resolve().parent.parent
-        SAVE_PATH = os.path.join(BASE_DIR, 'media')
-        title = request.POST.get('title')
-        thumb = request.POST.get('thumb')
-        size = request.POST.get('size')
-        link = request.POST.get('link')
-        try:
-            filename = wget.download(link, SAVE_PATH)
-            newfilename = filename.replace('./media/', '')
-            rand = randint(1, 8909)
-            fileid = f'video{rand}'
-            url = cloud_upload(filename, fileid)
-            my_dict = {
-                'color': 'twi_body',
-                'url': url,
-                'title': title,
-                'thumb': thumb,
-                'size': size,
-            }
-            return render(request, 'fbdown.html', context=my_dict)
-        except:
-            mess = 'Server Error'
-            my_dict = {
-                'grddient': 'grddient',
-                'color': 'twi_body',
-                'mess': mess
-            }
-
-            return render(request, 'twisearch.html', context=my_dict)
-
-    return redirect('/')
 
 
 def admins(request):
