@@ -134,8 +134,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 PWA_CONFIG = {
     # ...
-    "name": "YTF Downloder (Beta)",
-    "short_name": "YTF Downloder (Beta)",
+    "name": "YTF Downloder",
+    "short_name": "YTF Downloder",
     "theme_color": "#c12c11",
     "background_color": "#f85032",
     "display": "standalone",
