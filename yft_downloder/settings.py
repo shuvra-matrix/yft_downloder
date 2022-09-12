@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-!@assc!vx+b81aypnm!60r+7dylfa2fh=#d!!5)8p3r((2k5j(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ytfdown.herokuapp.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -134,8 +134,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 PWA_CONFIG = {
     # ...
-    "name": "YTF Downloder (Beta)",
-    "short_name": "YTF Downloder (Beta)",
+    "name": "YTF Downloder",
+    "short_name": "YTF Downloder",
     "theme_color": "#c12c11",
     "background_color": "#f85032",
     "display": "standalone",
