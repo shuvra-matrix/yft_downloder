@@ -387,6 +387,55 @@ def twisearch(request):
     return render(request, 'twisearch.html', context=my_dict)
 
 
+def insta_search(request):
+    if request.session.has_key('ip'):
+        pass
+    else:
+        return redirect('/')
+
+    if request.method == 'POST':
+        link = request.POST.get('link')
+        x = re.match(
+            r'^(https:|)[/][/]www.([^/]+[.])*instagram.com', link)
+        if x == None:
+            return warning_message(request, mess='Please Enter Valid Instagram Link', to='instasearch.html', bg='insta_body')
+
+        try:
+            import requests
+
+            url = "https://instagram-story-downloader-media-downloader.p.rapidapi.com/index"
+
+            querystring = {
+                "url": link}
+
+            headers = {
+                "X-RapidAPI-Key": "53db47703bmsh43337a6ff98140ep1d9019jsnfa4b3f6ce92b",
+                "X-RapidAPI-Host": "instagram-story-downloader-media-downloader.p.rapidapi.com"
+            }
+
+            response = requests.request(
+                "GET", url, headers=headers, params=querystring)
+
+            obj = response.json()
+
+            media_link = obj['media']
+
+            my_dict = {
+                'color': 'insta_down',
+                'link': media_link,
+            }
+            create_db(request, links=link, type='Instagram Videos')
+            return render(request, 'instasearch.html', context=my_dict)
+
+        except:
+            return warning_message(request, mess='Server Error', to='instasearch.html', bg='insta_body')
+
+    my_dict = {
+        'color': 'insta_body',
+    }
+    return render(request, 'instasearch.html', context=my_dict)
+
+
 def admins(request):
     if request.session.has_key('ip'):
         pass

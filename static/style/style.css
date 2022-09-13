@@ -105,6 +105,14 @@ body {
     --bs-bg-opacity: 0 !important;
 }
 
+.insta_body {
+    background-color: rgb(241, 77, 90);
+}
+
+.insta_down {
+    background-color: rgb(186, 50, 181);
+}
+
 .navbar-brand {
     color: white !important;
     font-size: 2rem !important;

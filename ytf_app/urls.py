@@ -17,6 +17,7 @@ urlpatterns = [
     path('fbsearch', views.fbsearch, name='fbsearch'),
     path('twitter_search', views.twisearch, name='twisearch'),
     path('admins', views.admins, name='admins'),
+    path('insta_search', views.insta_search, name='instasearch'),
     path('offline/', TemplateView.as_view(template_name="offline.html")),
 
 ]
