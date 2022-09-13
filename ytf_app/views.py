@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 import os
 from random import randint
 import re
@@ -20,11 +20,37 @@ def short_link(link):
     return link
 
 
+def create_db(request, links, type):
+    ip = request.session.get('ip')
+    address = request.session.get('address')
+    insert_ip = User_details.objects.create(
+        ip_add=ip, location=address, download_link=links, download_type=type)
+
+
+def warning_message(request, mess, to, bg):
+    my_dict = {
+        'grddient': 'grddient',
+        'color': bg,
+        'mess': mess
+    }
+    return render(request, to, context=my_dict)
+
+
 def get_size(urls):
     file = urllib.request.urlopen(
         urls)
     size = round((file.length)/1000000)
     return size
+
+
+def validate_yt_link(link):
+    x = re.match(
+        r'^(https:|)[/][/]www.([^/]+[.])*youtube.com', link)
+    y = re.match(r'^(https:|)[/][/]([^/]+[.])*youtu.be', link)
+    z = re.match(
+        r'^(https:|)[/][/]([^/]+[.])*youtube.com', link)
+
+    return (x, y, z)
 
 
 def index(request):
@@ -77,20 +103,9 @@ def ytdownload(request):
         quality_list = []
         size_list = []
         link = request.POST.get('link')
-        x = re.match(
-            r'^(https:|)[/][/]www.([^/]+[.])*youtube.com', link)
-        y = re.match(r'^(https:|)[/][/]([^/]+[.])*youtu.be', link)
-        z = re.match(
-            r'^(https:|)[/][/]([^/]+[.])*youtube.com', link)
+        x, y, z = validate_yt_link(link)
         if y == None and x == None and z == None:
-            mess = 'Please Enter Valid Youtube Link'
-            my_dict = {
-                'grddient': 'grddient',
-                'color': 'ytclass',
-                'mess': mess
-            }
-
-            return render(request, 'ydown.html', context=my_dict)
+            return warning_message(request, mess='Please Enter Valid Youtube Link', to='ydown.html', bg='ytclass')
 
         try:
             link = short_link(link)
@@ -113,12 +128,7 @@ def ytdownload(request):
             sec = length - (60*mins)
             length = f'{mins}:{sec} Minutes'
             thumb = obj['thumbnail'][-1]['url']
-            url1 = None
-            q1 = None
-            size1 = None
-            url2 = None
-            q2 = None
-            size2 = None
+            url1 = q1 = size1 = url2 = q2 = size2 = None
             try:
                 url1 = obj['formats'][1]['url']
                 q1 = obj['formats'][1]['qualityLabel']
@@ -133,14 +143,7 @@ def ytdownload(request):
                 pass
 
         except:
-            mess = 'Server Error'
-            my_dict = {
-                'grddient': 'grddient',
-                'color': 'ytclass',
-                'mess': mess
-            }
-
-            return render(request, 'ydown.html', context=my_dict)
+            return warning_message(request, mess='Server Error', to='ydown.html', bg='ytclass')
 
         my_dict = {
             'color': 'ytdown',
@@ -155,10 +158,7 @@ def ytdownload(request):
             'size2': size2,
 
         }
-        ip = request.session.get('ip')
-        address = request.session.get('address')
-        insert_ip = User_details.objects.create(
-            ip_add=ip, location=address, download_link=link, download_type='Youtube Videos')
+        create_db(request, links=link, type='Youtube Videos')
 
         return render(request, 'ytdownload.html', context=my_dict)
     return redirect('/')
@@ -181,20 +181,10 @@ def ytmsearch(request):
         SAVE_PATH = "./media"
         dc = None
         link = request.POST.get('link')
-        x = re.match(
-            r'^(https:|)[/][/]www.([^/]+[.])*youtube.com', link)
-        y = re.match(r'^(https:|)[/][/]([^/]+[.])*youtu.be', link)
-        z = re.match(
-            r'^(https:|)[/][/]([^/]+[.])*youtube.com', link)
+        x, y, z = validate_yt_link(link)
         if y == None and x == None and z == None:
-            mess = 'Please Enter Valid Youtube Link'
-            my_dict = {
-                'grddient': 'grddient',
-                'color': 'yt_body',
-                'mess': mess
-            }
+            return warning_message(request, mess='Please Enter Valid Youtube Link', to='ytmusic.html', bg='yt_body')
 
-            return render(request, 'ytmusic.html', context=my_dict)
         try:
             link = short_link(link)
 
@@ -217,8 +207,7 @@ def ytmsearch(request):
             sec = length - (60*mins)
             length = f'{mins}:{sec} Minutes'
             thumb = obj['thumbnail'][3]['url']
-            urls = None
-            size = None
+            urls = size = None
             try:
                 urls = obj['adaptiveFormats'][len(
                     obj['adaptiveFormats'])-1]['url']
@@ -234,19 +223,9 @@ def ytmsearch(request):
                 'length': length,
                 'size': size,
             }
-            ip = request.session.get('ip')
-            address = request.session.get('address')
-            insert_ip = User_details.objects.create(
-                ip_add=ip, location=address, download_link=link, download_type='Youtube Music')
+            create_db(request, links=link, type='Youtube Music')
         except:
-            mess = 'Server Error'
-            my_dict = {
-                'grddient': 'grddient',
-                'color': 'yt_body',
-                'mess': mess
-            }
-
-            return render(request, 'ytmusic.html', context=my_dict)
+            return warning_message(request, mess='Server Error', to='ytmusic.html', bg='yt_body')
 
         return render(request, 'ytmdownload.html', context=mydict)
     return redirect('/ytmusic')
@@ -262,8 +241,6 @@ def fbsearch(request):
     PRODUCT_URL = ''
     my_dict = {
         'color': 'fb_body',
-
-
     }
 
     if request.method == 'POST':
@@ -276,12 +253,7 @@ def fbsearch(request):
             r'^(https:|)[/][/]m.([^/]+[.])*facebook.com', PRODUCT_URL)
 
         if x == None and y == None and z == None and w == None:
-            mess = 'Please Enter Valid Facebook Link'
-            my_dict = {
-                'grddient': 'grddient',
-                'color': 'fb_body',
-                'mess': mess
-            }
+            return warning_message(request, mess='Please Enter Valid Facebook Link', to='fbsearch.html', bg='fb_body')
 
         else:
             try:
@@ -303,10 +275,7 @@ def fbsearch(request):
                 duration = a['duration_string']
                 thumb = a['thumbnail']
                 title = a['title']
-                sd_link = None
-                sd_size = None
-                hd_link = None
-                hd_size = None
+                sd_link = sd_size = hd_link = hd_size = None
                 try:
                     sd_link = a['formats'][2]['url']
                     sd_size = get_size(sd_link)
@@ -332,23 +301,11 @@ def fbsearch(request):
                     'duration': duration,
                 }
 
-                ip = request.session.get('ip')
-                address = request.session.get('address')
-                insert_ip = User_details.objects.create(
-                    ip_add=ip, location=address, download_link=PRODUCT_URL, download_type='Facebook Videos')
+                create_db(request, links=PRODUCT_URL, type='Facebook Videos')
 
                 return render(request, 'fbselect.html', context=my_dict)
             except:
-                mess = 'Server Error'
-                my_dict = {
-                    'grddient': 'grddient',
-                    'color': 'fb_body',
-                    'mess': mess
-                }
-
-                return render(request, 'fbsearch.html', context=my_dict)
-
-            return render(request, 'fbsearch.html', context=my_dict)
+                return warning_message(request, mess='Server Error', to='fbsearch.html', bg='fb_body')
 
     return render(request, 'fbsearch.html', context=my_dict)
 
@@ -364,13 +321,7 @@ def twisearch(request):
         x = re.match(
             r'^(https:|)[/][/]twitter.com', link)
         if x == None:
-            mess = 'Please Enter Valid Twitter Link'
-            my_dict = {
-                'grddient': 'grddient',
-                'color': 'fb_body',
-                'mess': mess
-            }
-            return render(request, 'twisearch.html', context=my_dict)
+            return warning_message(request, mess='Please Enter Valid Twitter Link', to='twisearch.html', bg='twi_body')
 
         url = "https://twitter65.p.rapidapi.com/api/twitter/links"
 
@@ -383,19 +334,12 @@ def twisearch(request):
         }
 
         try:
-
             response = requests.request(
                 "POST", url, json=payload, headers=headers)
             obj = response.json()[0]
             thumb = obj['pictureUrl']
-            print(thumb)
             title = obj['meta']['title']
-            urls_2 = None
-            quality_2 = None
-            urls_3 = None
-            quality_3 = None
-            size_2 = None
-            size_3 = None
+            urls_2 = quality_2 = urls_3 = quality_3 = size_2 = size_3 = None
             try:
                 urls_1 = obj['urls'][0]['url']
                 quality_1 = obj['urls'][0]['quality']
@@ -431,22 +375,11 @@ def twisearch(request):
                 'size2': size_2,
                 'size3': size_3,
 
-
             }
-            ip = request.session.get('ip')
-            address = request.session.get('address')
-            insert_ip = User_details.objects.create(
-                ip_add=ip, location=address, download_link=link, download_type='Twitter Videos')
+            create_db(request, links=link, type='Twitter Videos')
             return render(request, 'twitterselect.html', context=my_dict)
         except:
-            mess = 'Server Error'
-            my_dict = {
-                'grddient': 'grddient',
-                'color': 'twi_body',
-                'mess': mess
-            }
-
-            return render(request, 'twisearch.html', context=my_dict)
+            return warning_message(request, mess='Server Error', to='twisearch.html', bg='twi_body')
 
     my_dict = {
         'color': 'twi_body'
