@@ -10,6 +10,23 @@ from pathlib import Path
 import urllib.request
 
 
+def short_link(link):
+    link = link.replace('https://www.youtube.com/watch?v=', '')
+    link = link.replace('https://www.youtube.com/shorts/', '')
+    link = link.replace('https://youtu.be/', '')
+    link = link.replace('https://youtube.com/shorts/', '')
+    link = link.split('?')[0]
+    link = link.split('&')[0]
+    return link
+
+
+def get_size(urls):
+    file = urllib.request.urlopen(
+        urls)
+    size = round((file.length)/1000000)
+    return size
+
+
 def index(request):
     ip = ''
     address = ''
@@ -76,12 +93,7 @@ def ytdownload(request):
             return render(request, 'ydown.html', context=my_dict)
 
         try:
-            link = link.replace('https://www.youtube.com/watch?v=', '')
-            link = link.replace('https://www.youtube.com/shorts/', '')
-            link = link.replace('https://youtu.be/', '')
-            link = link.replace('https://youtube.com/shorts/', '')
-            link = link.split('?')[0]
-            link = link.split('&')[0]
+            link = short_link(link)
             url = "https://yt-api.p.rapidapi.com/dl"
 
             querystring = {"id": link}
@@ -110,20 +122,15 @@ def ytdownload(request):
             try:
                 url1 = obj['formats'][1]['url']
                 q1 = obj['formats'][1]['qualityLabel']
-                file = urllib.request.urlopen(
-                    url1)
-                size1 = round((file.length)/1000000)
+                size1 = get_size(url1)
             except:
                 pass
             try:
                 url2 = obj['formats'][2]['url']
                 q2 = obj['formats'][2]['qualityLabel']
-                file = urllib.request.urlopen(
-                    url2)
-                size2 = round((file.length)/1000000)
+                size2 = get_size(url2)
             except:
                 pass
-            
 
         except:
             mess = 'Server Error'
@@ -146,7 +153,7 @@ def ytdownload(request):
             'url2': url2,
             'q2': q2,
             'size2': size2,
-          
+
         }
         ip = request.session.get('ip')
         address = request.session.get('address')
@@ -189,12 +196,7 @@ def ytmsearch(request):
 
             return render(request, 'ytmusic.html', context=my_dict)
         try:
-            link = link.replace('https://www.youtube.com/watch?v=', '')
-            link = link.replace('https://www.youtube.com/shorts/', '')
-            link = link.replace('https://youtu.be/', '')
-            link = link.replace('https://youtube.com/shorts/', '')
-            link = link.split('?')[0]
-            link = link.split('&')[0]
+            link = short_link(link)
 
             url = "https://yt-api.p.rapidapi.com/dl"
 
@@ -220,9 +222,7 @@ def ytmsearch(request):
             try:
                 urls = obj['adaptiveFormats'][len(
                     obj['adaptiveFormats'])-1]['url']
-                file = urllib.request.urlopen(
-                    urls)
-                size = round((file.length)/1000000)
+                size = get_size(urls)
             except:
                 pass
             print(urls)
@@ -309,21 +309,14 @@ def fbsearch(request):
                 hd_size = None
                 try:
                     sd_link = a['formats'][2]['url']
-                    file = urllib.request.urlopen(
-                        sd_link)
-                    sd_size = round((file.length)/1000000)
-
+                    sd_size = get_size(sd_link)
                 except:
                     pass
                 try:
                     hd = a['formats'][3]['format_id']
                     if hd == 'hd':
                         hd_link = a['formats'][3]['url']
-
-                        file = urllib.request.urlopen(
-                            hd_link)
-                        hd_size = round((file.length)/1000000)
-
+                        hd_size = get_size(hd_link)
                 except:
                     pass
 
@@ -406,26 +399,20 @@ def twisearch(request):
             try:
                 urls_1 = obj['urls'][0]['url']
                 quality_1 = obj['urls'][0]['quality']
-                file = urllib.request.urlopen(
-                    urls_1)
-                size_1 = round((file.length)/1000000)
+                size_1 = get_size(urls_1)
             except:
                 pass
             try:
                 urls_2 = obj['urls'][1]['url']
                 quality_2 = obj['urls'][1]['quality']
-                file = urllib.request.urlopen(
-                    urls_2)
-                size_2 = round((file.length)/1000000)
+                size_2 = get_size(urls_2)
 
             except:
                 pass
             try:
                 urls_3 = obj['urls'][2]['url']
                 quality_3 = obj['urls'][2]['quality']
-                file = urllib.request.urlopen(
-                    urls_3)
-                size_3 = round((file.length)/1000000)
+                size_3 = get_size(urls_3)
 
             except:
                 pass

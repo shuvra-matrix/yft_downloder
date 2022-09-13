@@ -17,17 +17,6 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>{{quality1}} P</td>
-          <td>{{size1}} MB</td>
-          <td>
-            <button type="submit" class="btn btn-success">
-              <a style="color: white !important" href="{{url1}}" target="_blank"
-                >Download</a
-              >
-            </button>
-          </td>
-        </tr>
         {% if url2 %}
 
         <tr>
@@ -41,8 +30,19 @@
             </button>
           </td>
         </tr>
-
-        {% endif%} {% if url3 %}
+        {% endif%}
+        <tr>
+          <td>{{quality1}} P</td>
+          <td>{{size1}} MB</td>
+          <td>
+            <button type="submit" class="btn btn-success">
+              <a style="color: white !important" href="{{url1}}" target="_blank"
+                >Download</a
+              >
+            </button>
+          </td>
+        </tr>
+        {% if url3 %}
         <tr>
           <td>{{quality3}} P</td>
           <td>{{size3}} MB</td>
