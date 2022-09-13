@@ -1,47 +1,13 @@
 from django.shortcuts import render, redirect
-from pytube import YouTube
 import os
-import glob
 from random import randint
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
 import re
-import wget
 import requests
 import geoip2.database
 from .models import User_details
 import os
 from pathlib import Path
 import urllib.request
-
-
-def cloud_upload(dc, fileid):
-    cloudinary.config(
-        cloud_name="dqone7ala",
-        api_key="412496529895946",
-        api_secret="2siKsON-MfBmh9o0pIPVd31z-Ww",
-
-
-    )
-
-    upload_result = cloudinary.uploader.upload_large(
-        dc,  resource_type="video", public_id=fileid)
-
-    files = os.path.basename(dc)
-    url = upload_result['url']
-    dir = 'media'
-
-    urls = f'media\\{files}'
-    filelist = glob.glob(os.path.join(dir, "*"))
-    print('---------------My Files----------------', url)
-    for f in filelist:
-        print('---------------------Search File ------------------- >', f)
-        if f == urls:
-            os.remove(f)
-            print('-------------Delete File----------')
-            break
-    return url
 
 
 def index(request):
@@ -242,39 +208,50 @@ def ytmsearch(request):
 
             return render(request, 'ytmusic.html', context=my_dict)
         try:
-            yt = YouTube(link)
-            title = yt.title
-            length = yt.length
+            link = link.replace('https://www.youtube.com/watch?v=', '')
+            link = link.replace('https://www.youtube.com/shorts/', '')
+            link = link.replace('https://youtu.be/', '')
+            link = link.replace('https://youtube.com/shorts/', '')
+            link = link.split('?')[0]
+            link = link.split('&')[0]
+
+            url = "https://yt-api.p.rapidapi.com/dl"
+
+            querystring = {"id": link}
+            headers = {
+                "X-RapidAPI-Key": "53db47703bmsh43337a6ff98140ep1d9019jsnfa4b3f6ce92b",
+                "X-RapidAPI-Host": "yt-api.p.rapidapi.com"
+            }
+
+            response = requests.request(
+                "GET", url, headers=headers, params=querystring)
+
+            obj = response.json()
+
+            title = obj['title']
+            length = int(obj['lengthSeconds'])
             mins = int(length/60)
             sec = length - (60*mins)
             length = f'{mins}:{sec} Minutes'
-            thumb = yt.thumbnail_url
-            music_list = yt.streams.filter(
-                only_audio=True, abr='128kbps').first()
-            music_size = round((yt.streams.filter(
-                only_audio=True, abr='128kbps').first().filesize)/1000000)
-            if music_size > 100:
-                mess = 'FILE SIZE IS TOO LARGE'
-                my_dict = {
-                    'grddient': 'grddient',
-                    'color': 'yt_body',
-                    'mess': mess
-                }
-
-                return render(request, 'ytmusic.html', context=my_dict)
-            rand = randint(1, 8909)
-            filename = f'audio{rand}.mp3'
-            fileid = f'audio{rand}'
-            dc = music_list.download(SAVE_PATH, filename=filename)
-            url = cloud_upload(dc, filename)
-
+            thumb = obj['thumbnail'][3]['url']
+            urls = None
+            size = None
+            try:
+                urls = obj['adaptiveFormats'][len(
+                    obj['adaptiveFormats'])-1]['url']
+                file = urllib.request.urlopen(
+                    urls)
+                size = round((file.length)/1000000)
+            except:
+                pass
+            print(urls)
             mydict = {
                 'color': 'ytmdowns',
                 'title': title,
-                'url': url,
+                'urls': urls,
                 'thumb': thumb,
-                'size': music_size,
                 'length': length,
+                'size': size,
             }
             ip = request.session.get('ip')
             address = request.session.get('address')
