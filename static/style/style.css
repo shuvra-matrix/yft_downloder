@@ -189,8 +189,13 @@ svg {
 
 
 .maindown {
-    width: 70%;
+    width: 75%;
     margin: 4px auto;
+    border-color: #ffffff00;
+    background: #ffffff1f;
+    box-shadow: 1px 1px 12px rgb(30 24 24);
+
+    padding: 1rem;
 }
 
 .img {
@@ -207,7 +212,7 @@ svg {
 }
 
 img {
-    width: 50%;
+    width: 40%;
     margin: 1rem auto;
 }
 
@@ -326,8 +331,15 @@ p {
 }
 
 
+.table_div {
+    margin-bottom: 2rem;
+}
 
-
+table {
+    border-color: #ffffff00 !important;
+    background: #ffffff1f !important;
+    text-align: center !important;
+}
 
 @media only screen and (max-width: 600px) {
     .yt_main {
@@ -336,8 +348,8 @@ p {
     }
 
     .maindown {
-        width: 80%;
-        margin: 4px auto;
+        width: 90%;
+        margin-bottom: 2rem;
     }
 
     .img {
@@ -354,7 +366,7 @@ p {
     }
 
     img {
-        width: 60%;
+        width: 80%;
         margin: 1rem auto;
     }
 
@@ -416,6 +428,12 @@ p {
     .icon {
         width: 60px !important;
     }
+
+    .table_div {
+        margin-bottom: 0px;
+        margin-top: 50px;
+    }
+
 
 
 }

@@ -12,7 +12,6 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('ytdown', views.ydown, name='ytdown'),
     path('ytdownload', views.ytdownload, name='ytdownload'),
-    path('downloadyt', views.yvdown, name='yvdown'),
     path('ytmusic', views.ytmusic, name='ytmusic'),
     path('ytmsearch', views.ytmsearch, name='ytmsearch'),
     path('fbsearch', views.fbsearch, name='fbsearch'),

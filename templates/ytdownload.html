@@ -1,15 +1,16 @@
-{% extends 'header.html' %} 
-{% block body_block %}
+{% extends 'header.html' %} {% block body_block %}
 <div class="maindown">
-  {% if qlist %}
-  <div class="title"><p>{{title}}</p></div>
+  {% if title %}
+  <div class="title">
+    <p>{{title}}</p>
+  </div>
   <div class="img">
-    <img  src="{{thumb}}" alt="" />
+    <img src="{{thumb}}" alt="" />
   </div>
   <div class="length">
     <p>Length : {{length}}</p>
   </div>
-  <div>
+  <div class="table_div">
     <table class="table">
       <thead>
         <tr>
@@ -19,21 +20,45 @@
         </tr>
       </thead>
       <tbody>
+        {% if url1 %}
         <tr>
-          <td>{{qlist.0}}</td>
-          <td>{{size.0}} MB</td>
-          <td> <form action="{%url 'ytf:yvdown' %}" method="POST">  {% csrf_token %} <input type="hidden" name="title" value="{{title}}"> <input type="hidden" name="thumb"  value="{{thumb}}"> <input type="hidden" name="reg" value="{{qlist.0}}"> <input type="hidden" name="link" value="{{llist}}"><button type="submit" class="btn btn-primary">Select</button> </form>  </td>
+          <td>{{q1}}</td>
+          <td>{{size1}} MB</td>
+          <td>
+            <button type="submit" class="btn btn-success">
+              <a style="color: white !important" href="{{url1}}" target="_blank"
+                >Download</a
+              >
+            </button>
+          </td>
         </tr>
-        {% if qlist.1 %}
+        {% endif %} {% if url2 %}
         <tr>
-            <td>{{qlist.1}}</td>
-            <td>{{size.1}} MB</td>
-            <td> <form action="{%url 'ytf:yvdown' %}"" method="POST">  {% csrf_token %} <input type="hidden" name="reg" value="{{qlist.1}}"> <input type="hidden" name="title" value="{{title}}"> <input type="hidden" name="thumb"  value="{{thumb}}"> <input type="hidden" name="link" value="{{llist}}"><button type="submit" class="btn btn-primary">Select</button> </form>  </td>
-          </tr>
-          {% endif %}      
+          <td>{{q2}}</td>
+          <td>{{size2}} MB</td>
+          <td>
+            <button type="submit" class="btn btn-success">
+              <a style="color: white !important" href="{{url2}}" target="_blank"
+                >Download</a
+              >
+            </button>
+          </td>
+        </tr>
+        {% endif %} {% if url3 %}
+        <tr>
+          <td>{{q3}}</td>
+          <td>{{size3}} MB</td>
+          <td>
+            <button type="submit" class="btn btn-success">
+              <a style="color: white !important" href="{{url3}}" target="_blank"
+                >Download</a
+              >
+            </button>
+          </td>
+        </tr>
+        {% endif %}
       </tbody>
     </table>
   </div>
 </div>
-{% endif %} 
-{% endblock %}
+{% endif %} {% endblock %}

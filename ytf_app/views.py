@@ -110,43 +110,72 @@ def ytdownload(request):
             return render(request, 'ydown.html', context=my_dict)
 
         try:
-            yt = YouTube(link)
-            title = yt.title
-            length = yt.length
+            link = link.replace('https://www.youtube.com/watch?v=', '')
+            link = link.replace('https://www.youtube.com/shorts/', '')
+            link = link.replace('https://youtu.be/', '')
+            link = link.replace('https://youtube.com/shorts/', '')
+            link = link.split('?')[0]
+            link = link.split('&')[0]
+
+            url = "https://yt-api.p.rapidapi.com/dl"
+
+            querystring = {"id": link}
+            headers = {
+                "X-RapidAPI-Key": "53db47703bmsh43337a6ff98140ep1d9019jsnfa4b3f6ce92b",
+                "X-RapidAPI-Host": "yt-api.p.rapidapi.com"
+            }
+
+            response = requests.request(
+                "GET", url, headers=headers, params=querystring)
+
+            obj = response.json()
+
+            title = obj['title']
+            length = int(obj['lengthSeconds'])
             mins = int(length/60)
             sec = length - (60*mins)
             length = f'{mins}:{sec} Minutes'
-            thumb = yt.thumbnail_url
+            thumb = obj['thumbnail'][3]['url']
+            url1 = None
+            q1 = None
+            size1 = None
+            url2 = None
+            q2 = None
+            size2 = None
+            url3 = None
+            q3 = None
+            size3 = None
+            try:
+                url1 = obj['formats'][1]['url']
+                q1 = obj['formats'][1]['qualityLabel']
+                file = urllib.request.urlopen(
+                    url1)
+                size1 = round((file.length)/1000000)
+            except:
+                pass
+            try:
+                url2 = obj['formats'][2]['url']
+                q2 = obj['formats'][2]['qualityLabel']
+                file = urllib.request.urlopen(
+                    url2)
+                size2 = round((file.length)/1000000)
+            except:
+                pass
+            try:
+                newobj = obj['adaptiveFormats']
+                for i in range(6):
+                    if newobj[i]['qualityLabel'] == '1080p':
+                        url3 = newobj[i]['url']
+                        q3 = newobj[i]['qualityLabel']
+                        file = urllib.request.urlopen(
+                            url3)
+                        size3 = round((file.length)/1000000)
+                        break
+            except:
+                pass
 
         except:
             mess = 'Server Error'
-            my_dict = {
-                'grddient': 'grddient',
-                'color': 'ytclass',
-                'mess': mess
-            }
-
-            return render(request, 'ydown.html', context=my_dict)
-
-        try:
-
-            s1 = round((yt.streams.get_by_resolution('360p').filesize)/1000000)
-            if s1 < 100:
-                size_list.append(s1)
-                quality_list.append('360p')
-
-        except:
-            pass
-        try:
-            s2 = round((yt.streams.get_by_resolution('720p').filesize)/1000000)
-            if s2 < 100:
-                size_list.append(s2)
-                quality_list.append('720p')
-        except:
-            pass
-
-        if len(quality_list) == 0:
-            mess = 'File Size Is Too Large'
             my_dict = {
                 'grddient': 'grddient',
                 'color': 'ytclass',
@@ -156,13 +185,21 @@ def ytdownload(request):
             return render(request, 'ydown.html', context=my_dict)
 
         my_dict = {
-            'qlist': quality_list,
-            'llist': link,
             'color': 'ytdown',
             'title': title,
             'length': length,
             'thumb': thumb,
-            'size': size_list,
+            'url1': url1,
+            'q1': q1,
+            'size1': size1,
+            'url2': url2,
+            'q2': q2,
+            'size2': size2,
+            'url3': url3,
+            'q3': q3,
+            'size3': size3,
+
+
         }
         ip = request.session.get('ip')
         address = request.session.get('address')
@@ -170,47 +207,6 @@ def ytdownload(request):
             ip_add=ip, location=address, download_link=link, download_type='Youtube Videos')
 
         return render(request, 'ytdownload.html', context=my_dict)
-    return redirect('/')
-
-
-def yvdown(request):
-    if request.method == 'POST':
-        SAVE_PATH = "./media"
-        dc = None
-        title = request.POST.get('title')
-        link = request.POST.get('link')
-        reg = request.POST.get('reg')
-
-        thumb = request.POST.get('thumb')
-        try:
-            yt = YouTube(link)
-            links = yt.streams.filter(res=reg, progressive=True).first()
-            rand = randint(1, 8909)
-            filename = f'video{rand}.mp4'
-            fileid = f'video{rand}'
-            dc = links.download(SAVE_PATH, filename=filename)
-
-            url = cloud_upload(dc, fileid)
-
-        except:
-            mess = 'Server Error'
-            my_dict = {
-                'grddient': 'grddient',
-                'color': 'ytclass',
-                'mess': mess
-            }
-
-            return render(request, 'ydown.html', context=my_dict)
-
-        mydict = {
-
-            'color': 'ytdowns',
-            'title': title,
-            'url': url,
-            'thumb': thumb,
-            'reg': reg,
-        }
-        return render(request, 'ytdownpage.html', context=mydict)
     return redirect('/')
 
 
