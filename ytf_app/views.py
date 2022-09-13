@@ -82,7 +82,6 @@ def ytdownload(request):
             link = link.replace('https://youtube.com/shorts/', '')
             link = link.split('?')[0]
             link = link.split('&')[0]
-
             url = "https://yt-api.p.rapidapi.com/dl"
 
             querystring = {"id": link}
@@ -101,7 +100,7 @@ def ytdownload(request):
             mins = int(length/60)
             sec = length - (60*mins)
             length = f'{mins}:{sec} Minutes'
-            thumb = obj['thumbnail'][3]['url']
+            thumb = obj['thumbnail'][-1]['url']
             url1 = None
             q1 = None
             size1 = None
