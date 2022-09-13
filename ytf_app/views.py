@@ -108,9 +108,6 @@ def ytdownload(request):
             url2 = None
             q2 = None
             size2 = None
-            url3 = None
-            q3 = None
-            size3 = None
             try:
                 url1 = obj['formats'][1]['url']
                 q1 = obj['formats'][1]['qualityLabel']
@@ -127,18 +124,7 @@ def ytdownload(request):
                 size2 = round((file.length)/1000000)
             except:
                 pass
-            try:
-                newobj = obj['adaptiveFormats']
-                for i in range(6):
-                    if newobj[i]['qualityLabel'] == '1080p':
-                        url3 = newobj[i]['url']
-                        q3 = newobj[i]['qualityLabel']
-                        file = urllib.request.urlopen(
-                            url3)
-                        size3 = round((file.length)/1000000)
-                        break
-            except:
-                pass
+            
 
         except:
             mess = 'Server Error'
@@ -161,11 +147,7 @@ def ytdownload(request):
             'url2': url2,
             'q2': q2,
             'size2': size2,
-            'url3': url3,
-            'q3': q3,
-            'size3': size3,
-
-
+          
         }
         ip = request.session.get('ip')
         address = request.session.get('address')
