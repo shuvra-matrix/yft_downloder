@@ -31,7 +31,7 @@ def warning_message(request, mess, to, bg):
     my_dict = {
         'grddient': 'grddient',
         'color': bg,
-        'mess': mess
+        'mess': mess,
     }
     return render(request, to, context=my_dict)
 
