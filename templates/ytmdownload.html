@@ -1,6 +1,6 @@
 {% extends 'header.html' %} {% block body_block %}
 <div class="maindown">
-  {% if url %}
+  {% if urls %}
   <div class="title ytmaindown">
     <p style="color: white !important">{{title}}</p>
   </div>
@@ -11,13 +11,13 @@
     <p>Length : {{length}}</p>
   </div>
   <div class="link">
-    <a class="down" href="{{url}}" target="_blank">
+    <a class="down" href="{{urls}}" target="_blank">
       Download 128kbps {{size}} MB</a
     >
   </div>
   <div style="margin-top: 1.5rem">
     <p style="color: white !important">
-      After Download Remove .mp4 From File Name
+      After Download Please Replace File Name extension .weba With .mp3
     </p>
   </div>
 </div>

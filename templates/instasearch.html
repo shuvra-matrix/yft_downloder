@@ -1,0 +1,38 @@
+{% extends 'header.html' %} {% load static %} {% block body_block %}
+
+<div class="yt_main">
+  <div class="yt_sub">
+    <p class="yt_p">Instagram Video Download</p>
+  </div>
+
+  <div>
+    <form action="{%url 'ytf:instasearch' %}" method="POST">
+      {% csrf_token %}
+      <div class="input-group mb-3">
+        <input
+          type="url"
+          class="form-control"
+          placeholder="Enter Instagram Link"
+          aria-label="Recipient's username"
+          aria-describedby="button-addon2"
+          name="link"
+          required
+        />
+        <button
+          class="btn btn-outline-secondary"
+          type="submit"
+          id="button-addon2"
+          style="color: rgb(241, 77, 90) !important"
+        >
+          Search
+        </button>
+      </div>
+    </form>
+  </div>
+  {% if link %}
+  <div class="link">
+    <a class="down" href="{{link}}" target="_blank"> Download </a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

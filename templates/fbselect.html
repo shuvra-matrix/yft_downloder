@@ -1,16 +1,17 @@
-{% extends 'header.html' %} 
-{% block body_block %}
+{% extends 'header.html' %} {% block body_block %}
 <div class="maindown">
   {% if sd_url %}
-  <div class="title" style="color: white !important;"><p>{{title}}</p></div>
+  <div class="title" style="color: white !important">
+    <p>{{title}}</p>
+  </div>
   <div class="img">
     <img src="{{thumb}}" alt="" />
   </div>
-  <div class="length" style="color: white !important;">
+  <div class="length" style="color: white !important">
     <p>Length : {{duration}} Minutes</p>
   </div>
-  <div>
-    <table class="table" style="color: white !important;">
+  <div class="table_div">
+    <table class="table" style="color: white !important">
       <thead>
         <tr>
           <th scope="col">Quality</th>
@@ -22,18 +23,35 @@
         <tr>
           <td>SD</td>
           <td>{{sd_size}} MB</td>
-          <td> <form action="{%url 'ytf:fbdown' %}" method="POST">  {% csrf_token %} <input type="hidden" name="title" value="{{title}}"> <input type="hidden" name="thumb"  value="{{thumb}}"> <input type="hidden" name="size" value="{{sd_size}}"> <input type="hidden" name="link" value="{{sd_url}}"><button type="submit" class="btn btn-primary">Select</button> </form>  </td>
+          <td>
+            <button type="submit" class="btn btn-primary">
+              <a
+                style="color: white !important"
+                href="{{sd_url}}"
+                target="_blank"
+                >Download</a
+              >
+            </button>
+          </td>
         </tr>
         {% if hd_link %}
         <tr>
-            <td>HD</td>
-            <td>{{hd_size}} MB</td>
-            <td> <form action="{%url 'ytf:fbdown' %}"" method="POST">  {% csrf_token %} <input type="hidden" name="size" value="{{hd_size}}"> <input type="hidden" name="title" value="{{title}}"> <input type="hidden" name="thumb"  value="{{thumb}}"> <input type="hidden" name="link" value="{{hd_link}}"><button type="submit" class="btn btn-primary">Select</button> </form>  </td>
-          </tr>
-          {% endif %}      
+          <td>HD</td>
+          <td>{{hd_size}} MB</td>
+          <td>
+            <button type="submit" class="btn btn-primary">
+              <a
+                style="color: white !important"
+                href="{{hd_link}}"
+                target="_blank"
+                >Download</a
+              >
+            </button>
+          </td>
+        </tr>
+        {% endif %}
       </tbody>
     </table>
   </div>
 </div>
-{% endif %} 
-{% endblock %}
+{% endif %} {% endblock %}

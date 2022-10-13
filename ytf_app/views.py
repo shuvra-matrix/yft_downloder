@@ -1,13 +1,7 @@
-from django.shortcuts import render, redirect
-from pytube import YouTube
+from django.shortcuts import render, redirect, HttpResponse
 import os
-import glob
 from random import randint
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
 import re
-import wget
 import requests
 import geoip2.database
 from .models import User_details
@@ -16,32 +10,47 @@ from pathlib import Path
 import urllib.request
 
 
-def cloud_upload(dc, fileid):
-    cloudinary.config(
-        cloud_name="dqone7ala",
-        api_key="412496529895946",
-        api_secret="2siKsON-MfBmh9o0pIPVd31z-Ww",
+def short_link(link):
+    link = link.replace('https://www.youtube.com/watch?v=', '')
+    link = link.replace('https://www.youtube.com/shorts/', '')
+    link = link.replace('https://youtu.be/', '')
+    link = link.replace('https://youtube.com/shorts/', '')
+    link = link.split('?')[0]
+    link = link.split('&')[0]
+    return link
 
 
-    )
+def create_db(request, links, type):
+    ip = request.session.get('ip')
+    address = request.session.get('address')
+    insert_ip = User_details.objects.create(
+        ip_add=ip, location=address, download_link=links, download_type=type)
 
-    upload_result = cloudinary.uploader.upload_large(
-        dc,  resource_type="video", public_id=fileid)
 
-    files = os.path.basename(dc)
-    url = upload_result['url']
-    dir = 'media'
+def warning_message(request, mess, to, bg):
+    my_dict = {
+        'grddient': 'grddient',
+        'color': bg,
+        'mess': mess,
+    }
+    return render(request, to, context=my_dict)
 
-    urls = f'media/{files}'
-    filelist = glob.glob(os.path.join(dir, "*"))
-    print('---------------My Files----------------', url)
-    for f in filelist:
-        print('---------------------Search File ------------------- >', f)
-        if f == urls:
-            os.remove(f)
-            print('-------------Delete File----------')
-            break
-    return url
+
+def get_size(urls):
+    file = urllib.request.urlopen(
+        urls)
+    size = round((file.length)/1000000)
+    return size
+
+
+def validate_yt_link(link):
+    x = re.match(
+        r'^(https:|)[/][/]www.([^/]+[.])*youtube.com', link)
+    y = re.match(r'^(https:|)[/][/]([^/]+[.])*youtu.be', link)
+    z = re.match(
+        r'^(https:|)[/][/]([^/]+[.])*youtube.com', link)
+
+    return (x, y, z)
 
 
 def index(request):
@@ -94,123 +103,64 @@ def ytdownload(request):
         quality_list = []
         size_list = []
         link = request.POST.get('link')
-        x = re.match(
-            r'^(https:|)[/][/]www.([^/]+[.])*youtube.com', link)
-        y = re.match(r'^(https:|)[/][/]([^/]+[.])*youtu.be', link)
-        z = re.match(
-            r'^(https:|)[/][/]([^/]+[.])*youtube.com', link)
+        x, y, z = validate_yt_link(link)
         if y == None and x == None and z == None:
-            mess = 'Please Enter Valid Youtube Link'
-            my_dict = {
-                'grddient': 'grddient',
-                'color': 'ytclass',
-                'mess': mess
-            }
-
-            return render(request, 'ydown.html', context=my_dict)
+            return warning_message(request, mess='Please Enter Valid Youtube Link', to='ydown.html', bg='ytclass')
 
         try:
-            yt = YouTube(link)
-            title = yt.title
-            length = yt.length
+            link = short_link(link)
+            url = "https://yt-api.p.rapidapi.com/dl"
+
+            querystring = {"id": link}
+            headers = {
+                "X-RapidAPI-Key": "53db47703bmsh43337a6ff98140ep1d9019jsnfa4b3f6ce92b",
+                "X-RapidAPI-Host": "yt-api.p.rapidapi.com"
+            }
+
+            response = requests.request(
+                "GET", url, headers=headers, params=querystring)
+
+            obj = response.json()
+
+            title = obj['title']
+            length = int(obj['lengthSeconds'])
             mins = int(length/60)
             sec = length - (60*mins)
             length = f'{mins}:{sec} Minutes'
-            thumb = yt.thumbnail_url
+            thumb = obj['thumbnail'][-1]['url']
+            url1 = q1 = size1 = url2 = q2 = size2 = None
+            try:
+                url1 = obj['formats'][1]['url']
+                q1 = obj['formats'][1]['qualityLabel']
+                size1 = get_size(url1)
+            except:
+                pass
+            try:
+                url2 = obj['formats'][2]['url']
+                q2 = obj['formats'][2]['qualityLabel']
+                size2 = get_size(url2)
+            except:
+                pass
 
         except:
-            mess = 'Server Error'
-            my_dict = {
-                'grddient': 'grddient',
-                'color': 'ytclass',
-                'mess': mess
-            }
-
-            return render(request, 'ydown.html', context=my_dict)
-
-        try:
-
-            s1 = round((yt.streams.get_by_resolution('360p').filesize)/1000000)
-            if s1 < 100:
-                size_list.append(s1)
-                quality_list.append('360p')
-
-        except:
-            pass
-        try:
-            s2 = round((yt.streams.get_by_resolution('720p').filesize)/1000000)
-            if s2 < 100:
-                size_list.append(s2)
-                quality_list.append('720p')
-        except:
-            pass
-
-        if len(quality_list) == 0:
-            mess = 'File Size Is Too Large'
-            my_dict = {
-                'grddient': 'grddient',
-                'color': 'ytclass',
-                'mess': mess
-            }
-
-            return render(request, 'ydown.html', context=my_dict)
+            return warning_message(request, mess='Server Error', to='ydown.html', bg='ytclass')
 
         my_dict = {
-            'qlist': quality_list,
-            'llist': link,
             'color': 'ytdown',
             'title': title,
             'length': length,
             'thumb': thumb,
-            'size': size_list,
+            'url1': url1,
+            'q1': q1,
+            'size1': size1,
+            'url2': url2,
+            'q2': q2,
+            'size2': size2,
+
         }
-        ip = request.session.get('ip')
-        address = request.session.get('address')
-        insert_ip = User_details.objects.create(
-            ip_add=ip, location=address, download_link=link, download_type='Youtube Videos')
+        create_db(request, links=link, type='Youtube Videos')
 
         return render(request, 'ytdownload.html', context=my_dict)
-    return redirect('/')
-
-
-def yvdown(request):
-    if request.method == 'POST':
-        SAVE_PATH = "./media"
-        dc = None
-        title = request.POST.get('title')
-        link = request.POST.get('link')
-        reg = request.POST.get('reg')
-
-        thumb = request.POST.get('thumb')
-        try:
-            yt = YouTube(link)
-            links = yt.streams.filter(res=reg, progressive=True).first()
-            rand = randint(1, 8909)
-            filename = f'video{rand}.mp4'
-            fileid = f'video{rand}'
-            dc = links.download(SAVE_PATH, filename=filename)
-
-            url = cloud_upload(dc, fileid)
-
-        except:
-            mess = 'Server Error'
-            my_dict = {
-                'grddient': 'grddient',
-                'color': 'ytclass',
-                'mess': mess
-            }
-
-            return render(request, 'ydown.html', context=my_dict)
-
-        mydict = {
-
-            'color': 'ytdowns',
-            'title': title,
-            'url': url,
-            'thumb': thumb,
-            'reg': reg,
-        }
-        return render(request, 'ytdownpage.html', context=mydict)
     return redirect('/')
 
 
@@ -231,68 +181,51 @@ def ytmsearch(request):
         SAVE_PATH = "./media"
         dc = None
         link = request.POST.get('link')
-        x = re.match(
-            r'^(https:|)[/][/]www.([^/]+[.])*youtube.com', link)
-        y = re.match(r'^(https:|)[/][/]([^/]+[.])*youtu.be', link)
-        z = re.match(
-            r'^(https:|)[/][/]([^/]+[.])*youtube.com', link)
+        x, y, z = validate_yt_link(link)
         if y == None and x == None and z == None:
-            mess = 'Please Enter Valid Youtube Link'
-            my_dict = {
-                'grddient': 'grddient',
-                'color': 'yt_body',
-                'mess': mess
+            return warning_message(request, mess='Please Enter Valid Youtube Link', to='ytmusic.html', bg='yt_body')
+
+        try:
+            link = short_link(link)
+
+            url = "https://yt-api.p.rapidapi.com/dl"
+
+            querystring = {"id": link}
+            headers = {
+                "X-RapidAPI-Key": "53db47703bmsh43337a6ff98140ep1d9019jsnfa4b3f6ce92b",
+                "X-RapidAPI-Host": "yt-api.p.rapidapi.com"
             }
 
-            return render(request, 'ytmusic.html', context=my_dict)
-        try:
-            yt = YouTube(link)
-            title = yt.title
-            length = yt.length
+            response = requests.request(
+                "GET", url, headers=headers, params=querystring)
+
+            obj = response.json()
+
+            title = obj['title']
+            length = int(obj['lengthSeconds'])
             mins = int(length/60)
             sec = length - (60*mins)
             length = f'{mins}:{sec} Minutes'
-            thumb = yt.thumbnail_url
-            music_list = yt.streams.filter(
-                only_audio=True, abr='128kbps').first()
-            music_size = round((yt.streams.filter(
-                only_audio=True, abr='128kbps').first().filesize)/1000000)
-            if music_size > 100:
-                mess = 'FILE SIZE IS TOO LARGE'
-                my_dict = {
-                    'grddient': 'grddient',
-                    'color': 'yt_body',
-                    'mess': mess
-                }
-
-                return render(request, 'ytmusic.html', context=my_dict)
-            rand = randint(1, 8909)
-            filename = f'audio{rand}.mp3'
-            fileid = f'audio{rand}'
-            dc = music_list.download(SAVE_PATH, filename=filename)
-            url = cloud_upload(dc, filename)
-
+            thumb = obj['thumbnail'][3]['url']
+            urls = size = None
+            try:
+                urls = obj['adaptiveFormats'][len(
+                    obj['adaptiveFormats'])-1]['url']
+                size = get_size(urls)
+            except:
+                pass
+            print(urls)
             mydict = {
                 'color': 'ytmdowns',
                 'title': title,
-                'url': url,
+                'urls': urls,
                 'thumb': thumb,
-                'size': music_size,
                 'length': length,
+                'size': size,
             }
-            ip = request.session.get('ip')
-            address = request.session.get('address')
-            insert_ip = User_details.objects.create(
-                ip_add=ip, location=address, download_link=link, download_type='Youtube Music')
+            create_db(request, links=link, type='Youtube Music')
         except:
-            mess = 'Server Error'
-            my_dict = {
-                'grddient': 'grddient',
-                'color': 'yt_body',
-                'mess': mess
-            }
-
-            return render(request, 'ytmusic.html', context=my_dict)
+            return warning_message(request, mess='Server Error', to='ytmusic.html', bg='yt_body')
 
         return render(request, 'ytmdownload.html', context=mydict)
     return redirect('/ytmusic')
@@ -308,8 +241,6 @@ def fbsearch(request):
     PRODUCT_URL = ''
     my_dict = {
         'color': 'fb_body',
-
-
     }
 
     if request.method == 'POST':
@@ -322,12 +253,7 @@ def fbsearch(request):
             r'^(https:|)[/][/]m.([^/]+[.])*facebook.com', PRODUCT_URL)
 
         if x == None and y == None and z == None and w == None:
-            mess = 'Please Enter Valid Facebook Link'
-            my_dict = {
-                'grddient': 'grddient',
-                'color': 'fb_body',
-                'mess': mess
-            }
+            return warning_message(request, mess='Please Enter Valid Facebook Link', to='fbsearch.html', bg='fb_body')
 
         else:
             try:
@@ -349,40 +275,19 @@ def fbsearch(request):
                 duration = a['duration_string']
                 thumb = a['thumbnail']
                 title = a['title']
-                sd_link = None
-                sd_size = None
-                hd_link = None
-                hd_size = None
+                sd_link = sd_size = hd_link = hd_size = None
                 try:
                     sd_link = a['formats'][2]['url']
-                    file = urllib.request.urlopen(
-                        sd_link)
-                    sd_size = round((file.length)/1000000)
-
+                    sd_size = get_size(sd_link)
                 except:
                     pass
                 try:
                     hd = a['formats'][3]['format_id']
                     if hd == 'hd':
                         hd_link = a['formats'][3]['url']
-
-                        file = urllib.request.urlopen(
-                            hd_link)
-                        size = round((file.length)/1000000)
-                        if size < 100:
-                            hd_size = size
+                        hd_size = get_size(hd_link)
                 except:
                     pass
-
-                if sd_size > 100 and hd_size > 100:
-                    mess = 'File Size Is Too Large'
-                    my_dict = {
-                        'grddient': 'grddient',
-                        'color': 'fb_body',
-                        'mess': mess
-                    }
-
-                    return render(request, 'fbsearch.html', context=my_dict)
 
                 my_dict = {
                     'color': 'fb_body',
@@ -395,61 +300,14 @@ def fbsearch(request):
                     'thumb': thumb,
                     'duration': duration,
                 }
-                ip = request.session.get('ip')
-                address = request.session.get('address')
-                insert_ip = User_details.objects.create(
-                    ip_add=ip, location=address, download_link=PRODUCT_URL, download_type='Facebook Videos')
+
+                create_db(request, links=PRODUCT_URL, type='Facebook Videos')
 
                 return render(request, 'fbselect.html', context=my_dict)
             except:
-                mess = 'Server Error'
-                my_dict = {
-                    'grddient': 'grddient',
-                    'color': 'fb_body',
-                    'mess': mess
-                }
-
-                return render(request, 'fbsearch.html', context=my_dict)
-
-            return render(request, 'fbsearch.html', context=my_dict)
+                return warning_message(request, mess='Server Error', to='fbsearch.html', bg='fb_body')
 
     return render(request, 'fbsearch.html', context=my_dict)
-
-
-def fbdown(request):
-    link = ''
-    if request.method == 'POST':
-        BASE_DIR = Path(__file__).resolve().parent.parent
-        SAVE_PATH = os.path.join(BASE_DIR, 'media')
-        title = request.POST.get('title')
-        thumb = request.POST.get('thumb')
-        size = request.POST.get('size')
-        link = request.POST.get('link')
-        try:
-            filename = wget.download(link, SAVE_PATH)
-            newfilename = filename.replace('./media/', '')
-            rand = randint(1, 8909)
-            fileid = f'video{rand}'
-            url = cloud_upload(filename, fileid)
-            my_dict = {
-                'color': 'fb_body',
-                'url': url,
-                'title': title,
-                'thumb': thumb,
-                'size': size,
-            }
-            return render(request, 'fbdown.html', context=my_dict)
-        except:
-            mess = 'Server Error'
-            my_dict = {
-                'grddient': 'grddient',
-                'color': 'fb_body',
-                'mess': mess
-            }
-
-            return render(request, 'fbsearch.html', context=my_dict)
-
-    return redirect('/fbsearch')
 
 
 def twisearch(request):
@@ -463,13 +321,7 @@ def twisearch(request):
         x = re.match(
             r'^(https:|)[/][/]twitter.com', link)
         if x == None:
-            mess = 'Please Enter Valid Twitter Link'
-            my_dict = {
-                'grddient': 'grddient',
-                'color': 'fb_body',
-                'mess': mess
-            }
-            return render(request, 'twisearch.html', context=my_dict)
+            return warning_message(request, mess='Please Enter Valid Twitter Link', to='twisearch.html', bg='twi_body')
 
         url = "https://twitter65.p.rapidapi.com/api/twitter/links"
 
@@ -482,57 +334,32 @@ def twisearch(request):
         }
 
         try:
-
             response = requests.request(
                 "POST", url, json=payload, headers=headers)
             obj = response.json()[0]
             thumb = obj['pictureUrl']
-            print(thumb)
             title = obj['meta']['title']
-            urls_2 = None
-            quality_2 = None
-            urls_3 = None
-            quality_3 = None
-            size_2 = None
-            size_3 = None
+            urls_2 = quality_2 = urls_3 = quality_3 = size_2 = size_3 = None
             try:
                 urls_1 = obj['urls'][0]['url']
                 quality_1 = obj['urls'][0]['quality']
-                file = urllib.request.urlopen(
-                    urls_1)
-                size_1 = round((file.length)/1000000)
+                size_1 = get_size(urls_1)
             except:
                 pass
             try:
                 urls_2 = obj['urls'][1]['url']
                 quality_2 = obj['urls'][1]['quality']
-                file = urllib.request.urlopen(
-                    urls_2)
-                a = round((file.length)/1000000)
-                if a < 100:
-                    size_2 = a
+                size_2 = get_size(urls_2)
+
             except:
                 pass
             try:
                 urls_3 = obj['urls'][2]['url']
                 quality_3 = obj['urls'][2]['quality']
-                file = urllib.request.urlopen(
-                    urls_3)
-                b = round((file.length)/1000000)
-                if b < 100:
-                    size_3 = b
+                size_3 = get_size(urls_3)
+
             except:
                 pass
-
-            if size_1 > 100 and size_2 > 100 and size_3 > 100:
-                mess = 'File Size Is Too Large'
-                my_dict = {
-                    'grddient': 'grddient',
-                    'color': 'twi_body',
-                    'mess': mess
-                }
-
-                return render(request, 'twisearch.html', context=my_dict)
 
             my_dict = {
                 'color': 'twi_body',
@@ -548,22 +375,11 @@ def twisearch(request):
                 'size2': size_2,
                 'size3': size_3,
 
-
             }
-            ip = request.session.get('ip')
-            address = request.session.get('address')
-            insert_ip = User_details.objects.create(
-                ip_add=ip, location=address, download_link=link, download_type='Twitter Videos')
+            create_db(request, links=link, type='Twitter Videos')
             return render(request, 'twitterselect.html', context=my_dict)
         except:
-            mess = 'Server Error'
-            my_dict = {
-                'grddient': 'grddient',
-                'color': 'twi_body',
-                'mess': mess
-            }
-
-            return render(request, 'twisearch.html', context=my_dict)
+            return warning_message(request, mess='Server Error', to='twisearch.html', bg='twi_body')
 
     my_dict = {
         'color': 'twi_body'
@@ -571,39 +387,53 @@ def twisearch(request):
     return render(request, 'twisearch.html', context=my_dict)
 
 
-def twitterdown(request):
+def insta_search(request):
+    if request.session.has_key('ip'):
+        pass
+    else:
+        return redirect('/')
+
     if request.method == 'POST':
-        BASE_DIR = Path(__file__).resolve().parent.parent
-        SAVE_PATH = os.path.join(BASE_DIR, 'media')
-        title = request.POST.get('title')
-        thumb = request.POST.get('thumb')
-        size = request.POST.get('size')
         link = request.POST.get('link')
+        x = re.match(
+            r'^(https:|)[/][/]www.([^/]+[.])*instagram.com', link)
+        if x == None:
+            return warning_message(request, mess='Please Enter Valid Instagram Link', to='instasearch.html', bg='insta_body')
+
         try:
-            filename = wget.download(link, SAVE_PATH)
-            newfilename = filename.replace('./media/', '')
-            rand = randint(1, 8909)
-            fileid = f'video{rand}'
-            url = cloud_upload(filename, fileid)
-            my_dict = {
-                'color': 'twi_body',
-                'url': url,
-                'title': title,
-                'thumb': thumb,
-                'size': size,
+            import requests
+
+            url = "https://instagram-story-downloader-media-downloader.p.rapidapi.com/index"
+
+            querystring = {
+                "url": link}
+
+            headers = {
+                "X-RapidAPI-Key": "53db47703bmsh43337a6ff98140ep1d9019jsnfa4b3f6ce92b",
+                "X-RapidAPI-Host": "instagram-story-downloader-media-downloader.p.rapidapi.com"
             }
-            return render(request, 'fbdown.html', context=my_dict)
+
+            response = requests.request(
+                "GET", url, headers=headers, params=querystring)
+
+            obj = response.json()
+
+            media_link = obj['media']
+
+            my_dict = {
+                'color': 'insta_down',
+                'link': media_link,
+            }
+            create_db(request, links=link, type='Instagram Videos')
+            return render(request, 'instasearch.html', context=my_dict)
+
         except:
-            mess = 'Server Error'
-            my_dict = {
-                'grddient': 'grddient',
-                'color': 'twi_body',
-                'mess': mess
-            }
+            return warning_message(request, mess='Server Error', to='instasearch.html', bg='insta_body')
 
-            return render(request, 'twisearch.html', context=my_dict)
-
-    return redirect('/')
+    my_dict = {
+        'color': 'insta_body',
+    }
+    return render(request, 'instasearch.html', context=my_dict)
 
 
 def admins(request):
